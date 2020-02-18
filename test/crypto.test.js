@@ -17,7 +17,7 @@ describe('webcrypto', function() {
 describe('crypto operations', () => {
 
   const mk = "b6244a9c1189fc7b9fa70e89e6e342b94d742c6a86bbf4bea541aa9b1e2988fa";
-  const ak = "15a54837a365c50d8c4dc3016defcc3458c9f654c3cba04053b42a68a55e99d1"
+  const ak = "15a54837a365c50d8c4dc3016defcc3458c9f654c3cba04053b42a68a55e99d1";
 
   it('generates valid uuid', () => {
     expect(webCrypto.generateUUIDSync().length).to.equal(36);
@@ -46,14 +46,6 @@ describe('crypto operations', () => {
     expect(cj_result.length).to.equal(length/4);
   });
 
-  it('generates proper length item key', async () => {
-    let wc_result = await webCrypto.generateItemEncryptionKey()
-    expect(wc_result.length).to.equal(128);
-
-    let cj_result = await cryptoJs.generateItemEncryptionKey()
-    expect(cj_result.length).to.equal(128);
-  });
-
   it('cryptojs and webcrypto should generate same hmac signatures', async () => {
     var message = "hello world";
     var key = ak;
@@ -65,7 +57,7 @@ describe('crypto operations', () => {
   })
 
   it('compares strings with timing safe comparison', async () => {
-    let crypto = new SNAbstractCrypto();
+    let crypto = new SNPureCrypto();
 
     expect(crypto.timingSafeEqual("hello world", "hello world")).to.equal(true);
 
