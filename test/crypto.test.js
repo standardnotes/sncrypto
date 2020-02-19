@@ -22,7 +22,7 @@ describe('crypto operations', async function() {
   it('properly encodes base64', async function() {
     const source = "hello world";
     const target = "aGVsbG8gd29ybGQ=";
-    expect(await base64(source)).to.equal(target);
+    expect(await base64Encode(source)).to.equal(target);
   });
 
   it('properly decodes base64', async function() {

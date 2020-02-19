@@ -1,4 +1,4 @@
-(window["webpackJsonpSNCrypto"] = window["webpackJsonpSNCrypto"] || []).push([[1],{
+(window["webpackJsonpSNCrypto"] = window["webpackJsonpSNCrypto"] || []).push([["libsodium"],{
 
 /***/ "./lib/libsodium.js":
 /*!**************************!*\
@@ -82,3 +82,4 @@ __webpack_require__.r(__webpack_exports__);
 /***/ })
 
 }]);
+//# sourceMappingURL=libsodium.bundle.js.map

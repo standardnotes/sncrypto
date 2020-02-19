@@ -15,6 +15,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: './[name]',
+    chunkFilename: '[name].bundle.js',
     library: 'SNCrypto',
     libraryTarget: 'umd',
     umdNamedDefine: true,
