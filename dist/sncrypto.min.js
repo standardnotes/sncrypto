@@ -1023,7 +1023,7 @@ function (_SNPureCrypto) {
      *
      * @param {String|Buffer} ciphertext
      * @param {String} nonce  In hex format
-     * @param {String} key   In hex format
+     * @param {String} key  In hex format
      * @param {String|Buffer} assocData
      */
 
