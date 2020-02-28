@@ -228,8 +228,9 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+
 /**
- *  Abstract class with default implementations of some crypto functions.
+ * Abstract class with default implementations of basic helper functions.
  */
 
 var SNPureCrypto =
@@ -244,7 +245,7 @@ function () {
     value: function generateUUIDSync() {
       return Object(_Lib_web_utils__WEBPACK_IMPORTED_MODULE_0__["generateUUIDSync"])();
     }
-    /* Can be overriden by native platforms to provide async implementation; defaults here to syncronous */
+    /* Can be overriden by native platforms to provide async implementation */
 
   }, {
     key: "generateUUID",
@@ -290,185 +291,6 @@ function () {
 
 /***/ }),
 
-/***/ "./lib/crypto/react_native_crypto.js":
-/*!*******************************************!*\
-  !*** ./lib/crypto/react_native_crypto.js ***!
-  \*******************************************/
-/*! exports provided: SNReactNativeCrypto */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNReactNativeCrypto", function() { return SNReactNativeCrypto; });
-/* harmony import */ var _Crypto_pure_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @Crypto/pure_crypto */ "./lib/crypto/pure_crypto.js");
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-
-var SNReactNativeCrypto =
-/*#__PURE__*/
-function (_SNPureCrypto) {
-  _inherits(SNReactNativeCrypto, _SNPureCrypto);
-
-  function SNReactNativeCrypto() {
-    _classCallCheck(this, SNReactNativeCrypto);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(SNReactNativeCrypto).apply(this, arguments));
-  }
-
-  _createClass(SNReactNativeCrypto, [{
-    key: "setNativeModules",
-
-    /** 
-     * @public
-     * Dynamically set native module instances. 
-     */
-    value: function setNativeModules(_ref) {
-      var aes = _ref.aes,
-          base64 = _ref.base64,
-          sodium = _ref.sodium;
-      this.Aes = aes;
-      this.base64 = base64;
-      this.sodium = sodium;
-    }
-  }, {
-    key: "generateUUID",
-    value: function generateUUID() {
-      return regeneratorRuntime.async(function generateUUID$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              return _context.abrupt("return", this.Aes.randomUuid().then(function (uuid) {
-                return uuid.toLowerCase();
-              }));
-
-            case 1:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "pbkdf2",
-    value: function pbkdf2(password, salt, cost, length) {
-      return regeneratorRuntime.async(function pbkdf2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              return _context2.abrupt("return", this.Aes.pbkdf2(password, salt, cost, length).then(function (key) {
-                return key;
-              }));
-
-            case 1:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "generateRandomKey",
-    value: function generateRandomKey(length) {
-      return regeneratorRuntime.async(function generateRandomKey$(_context3) {
-        while (1) {
-          switch (_context3.prev = _context3.next) {
-            case 0:
-              return _context3.abrupt("return", this.Aes.randomKey(length / 8));
-
-            case 1:
-            case "end":
-              return _context3.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "base64",
-    value: function base64(text) {
-      return regeneratorRuntime.async(function base64$(_context4) {
-        while (1) {
-          switch (_context4.prev = _context4.next) {
-            case 0:
-              return _context4.abrupt("return", this.base64.encode(text));
-
-            case 1:
-            case "end":
-              return _context4.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "base64Decode",
-    value: function base64Decode(base64String) {
-      return regeneratorRuntime.async(function base64Decode$(_context5) {
-        while (1) {
-          switch (_context5.prev = _context5.next) {
-            case 0:
-              return _context5.abrupt("return", this.base64.decode(base64String));
-
-            case 1:
-            case "end":
-              return _context5.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "sha256",
-    value: function sha256(text) {
-      return regeneratorRuntime.async(function sha256$(_context6) {
-        while (1) {
-          switch (_context6.prev = _context6.next) {
-            case 0:
-              return _context6.abrupt("return", this.Aes.sha256(text));
-
-            case 1:
-            case "end":
-              return _context6.stop();
-          }
-        }
-      }, null, this);
-    }
-  }, {
-    key: "hmac256",
-    value: function hmac256(message, key) {
-      return regeneratorRuntime.async(function hmac256$(_context7) {
-        while (1) {
-          switch (_context7.prev = _context7.next) {
-            case 0:
-              return _context7.abrupt("return", this.Aes.hmac256(message, key));
-
-            case 1:
-            case "end":
-              return _context7.stop();
-          }
-        }
-      }, null, this);
-    }
-  }]);
-
-  return SNReactNativeCrypto;
-}(_Crypto_pure_crypto__WEBPACK_IMPORTED_MODULE_0__["SNPureCrypto"]);
-
-/***/ }),
-
 /***/ "./lib/crypto/webcrypto.js":
 /*!*********************************!*\
   !*** ./lib/crypto/webcrypto.js ***!
@@ -502,6 +324,27 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 var subtleCrypto = _Lib_web_utils__WEBPACK_IMPORTED_MODULE_1__["getSubtleCrypto"]();
+var WebCryptoAlgs = {
+  AesCbc: 'AES-CBC',
+  Sha512: 'SHA-512',
+  Sha256: 'SHA-256',
+  Pbkdf2: 'PBKDF2',
+  Sha1: 'SHA-1',
+  Hmac: 'HMAC'
+};
+var WebCryptoActions = {
+  DeriveBits: 'deriveBits',
+  Encrypt: 'encrypt',
+  Decrypt: 'decrypt',
+  Sign: 'sign'
+};
+/**
+ * The web crypto class allows access to a set of cryptographic primitives available
+ * in a web environment, consisting of two main sources:
+ * - Built-in browser WebCrypto
+ * - Libsodium.js library integration
+ */
+
 var SNWebCrypto =
 /*#__PURE__*/
 function (_SNPureCrypto) {
@@ -519,43 +362,48 @@ function (_SNPureCrypto) {
     });
     return _this;
   }
-  /** @public */
+  /** 
+   * @access public 
+   * @param {String} password
+   * @param {String} salt  In hex format
+   * @param {Int} iterations
+   * @param {Int} length  In bits
+   */
 
 
   _createClass(SNWebCrypto, [{
     key: "pbkdf2",
-    value: function pbkdf2(_ref) {
-      var password, salt, iterations, length, key;
+    value: function pbkdf2(password, salt, iterations, length) {
+      var key;
       return regeneratorRuntime.async(function pbkdf2$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              password = _ref.password, salt = _ref.salt, iterations = _ref.iterations, length = _ref.length;
-              _context.next = 3;
-              return regeneratorRuntime.awrap(this.webCryptoImportKey(password, "PBKDF2", ["deriveBits"]));
+              _context.next = 2;
+              return regeneratorRuntime.awrap(this.webCryptoImportKey(password, WebCryptoAlgs.Pbkdf2, [WebCryptoActions.DeriveBits]));
 
-            case 3:
+            case 2:
               key = _context.sent;
 
               if (key) {
-                _context.next = 7;
+                _context.next = 6;
                 break;
               }
 
-              console.log("Key is null, unable to continue");
+              console.log('Key is null, unable to continue');
               return _context.abrupt("return", null);
 
-            case 7:
+            case 6:
               return _context.abrupt("return", this.webCryptoDeriveBits(key, salt, iterations, length));
 
-            case 8:
+            case 7:
             case "end":
               return _context.stop();
           }
         }
       }, null, this);
     }
-    /** @public */
+    /** @access public */
 
   }, {
     key: "generateRandomKey",
@@ -576,7 +424,7 @@ function (_SNPureCrypto) {
         }
       });
     }
-    /** @public */
+    /** @access public */
 
   }, {
     key: "aes256CbcEncrypt",
@@ -597,11 +445,11 @@ function (_SNPureCrypto) {
             case 5:
               ivData = _context3.sent;
               alg = {
-                name: 'AES-CBC',
+                name: WebCryptoAlgs.AesCbc,
                 iv: ivData
               };
               _context3.next = 9;
-              return regeneratorRuntime.awrap(this.webCryptoImportKey(keyData, alg.name, ["encrypt"]));
+              return regeneratorRuntime.awrap(this.webCryptoImportKey(keyData, alg.name, [WebCryptoActions.Encrypt]));
 
             case 9:
               importedKeyData = _context3.sent;
@@ -629,7 +477,7 @@ function (_SNPureCrypto) {
         }
       }, null, this);
     }
-    /** @public */
+    /** @access public */
 
   }, {
     key: "aes256CbcDecrypt",
@@ -650,11 +498,11 @@ function (_SNPureCrypto) {
             case 5:
               ivData = _context5.sent;
               alg = {
-                name: 'AES-CBC',
+                name: WebCryptoAlgs.AesCbc,
                 iv: ivData
               };
               _context5.next = 9;
-              return regeneratorRuntime.awrap(this.webCryptoImportKey(keyData, alg.name, ["decrypt"]));
+              return regeneratorRuntime.awrap(this.webCryptoImportKey(keyData, alg.name, [WebCryptoActions.Decrypt]));
 
             case 9:
               importedKeyData = _context5.sent;
@@ -683,7 +531,7 @@ function (_SNPureCrypto) {
                   }
                 });
               }).catch(function (error) {
-                console.error("Error decrypting:", error);
+                console.error('Error decrypting:', error);
               }));
 
             case 14:
@@ -693,7 +541,7 @@ function (_SNPureCrypto) {
         }
       }, null, this);
     }
-    /** @public */
+    /** @access public */
 
   }, {
     key: "hmac256",
@@ -709,8 +557,8 @@ function (_SNPureCrypto) {
             case 2:
               keyHexData = _context7.sent;
               _context7.next = 5;
-              return regeneratorRuntime.awrap(this.webCryptoImportKey(keyHexData, "HMAC", ["sign"], {
-                name: "SHA-256"
+              return regeneratorRuntime.awrap(this.webCryptoImportKey(keyHexData, WebCryptoAlgs.Hmac, [WebCryptoActions.Sign], {
+                name: WebCryptoAlgs.Sha256
               }));
 
             case 5:
@@ -721,7 +569,7 @@ function (_SNPureCrypto) {
             case 8:
               messageData = _context7.sent;
               return _context7.abrupt("return", crypto.subtle.sign({
-                name: "HMAC"
+                name: WebCryptoAlgs.Hmac
               }, keyData, messageData).then(function _callee2(signature) {
                 var hash;
                 return regeneratorRuntime.async(function _callee2$(_context6) {
@@ -742,7 +590,7 @@ function (_SNPureCrypto) {
                   }
                 });
               }).catch(function (err) {
-                console.error("Error computing hmac", err);
+                console.error('Error computing hmac', err);
               }));
 
             case 10:
@@ -752,7 +600,7 @@ function (_SNPureCrypto) {
         }
       }, null, this);
     }
-    /** @public */
+    /** @access public */
 
   }, {
     key: "sha256",
@@ -768,7 +616,7 @@ function (_SNPureCrypto) {
             case 2:
               textData = _context8.sent;
               _context8.next = 5;
-              return regeneratorRuntime.awrap(crypto.subtle.digest("SHA-256", textData));
+              return regeneratorRuntime.awrap(crypto.subtle.digest(WebCryptoAlgs.Sha256, textData));
 
             case 5:
               digest = _context8.sent;
@@ -782,7 +630,7 @@ function (_SNPureCrypto) {
       });
     }
     /**
-     * @public
+     * @access public
      * Use only for legacy applications.
      */
     // eslint-disable-next-line camelcase
@@ -801,7 +649,7 @@ function (_SNPureCrypto) {
             case 2:
               textData = _context9.sent;
               _context9.next = 5;
-              return regeneratorRuntime.awrap(crypto.subtle.digest("SHA-1", textData));
+              return regeneratorRuntime.awrap(crypto.subtle.digest(WebCryptoAlgs.Sha1, textData));
 
             case 5:
               digest = _context9.sent;
@@ -814,7 +662,7 @@ function (_SNPureCrypto) {
         }
       });
     }
-    /** @private */
+    /** @access private */
 
   }, {
     key: "webCryptoImportKey",
@@ -824,7 +672,7 @@ function (_SNPureCrypto) {
         while (1) {
           switch (_context10.prev = _context10.next) {
             case 0:
-              if (!(typeof input === "string")) {
+              if (!(typeof input === 'string')) {
                 _context10.next = 6;
                 break;
               }
@@ -842,7 +690,7 @@ function (_SNPureCrypto) {
 
             case 7:
               text = _context10.t0;
-              return _context10.abrupt("return", subtleCrypto.importKey("raw", text, {
+              return _context10.abrupt("return", subtleCrypto.importKey('raw', text, {
                 name: alg,
                 hash: hash
               }, false, actions).then(function (key) {
@@ -859,7 +707,7 @@ function (_SNPureCrypto) {
         }
       });
     }
-    /** @private */
+    /** @access private */
 
   }, {
     key: "webCryptoDeriveBits",
@@ -869,20 +717,21 @@ function (_SNPureCrypto) {
         while (1) {
           switch (_context12.prev = _context12.next) {
             case 0:
-              _context12.next = 2;
+              _context12.t0 = WebCryptoAlgs.Pbkdf2;
+              _context12.next = 3;
               return regeneratorRuntime.awrap(_Lib_web_utils__WEBPACK_IMPORTED_MODULE_1__["stringToArrayBuffer"](salt));
 
-            case 2:
-              _context12.t0 = _context12.sent;
-              _context12.t1 = iterations;
-              _context12.t2 = {
-                name: "SHA-512"
+            case 3:
+              _context12.t1 = _context12.sent;
+              _context12.t2 = iterations;
+              _context12.t3 = {
+                name: WebCryptoAlgs.Sha512
               };
               params = {
-                name: "PBKDF2",
-                salt: _context12.t0,
-                iterations: _context12.t1,
-                hash: _context12.t2
+                name: _context12.t0,
+                salt: _context12.t1,
+                iterations: _context12.t2,
+                hash: _context12.t3
               };
               return _context12.abrupt("return", subtleCrypto.deriveBits(params, key, length).then(function _callee3(bits) {
                 var key;
@@ -908,7 +757,7 @@ function (_SNPureCrypto) {
                 return null;
               }));
 
-            case 7:
+            case 8:
             case "end":
               return _context12.stop();
           }
@@ -916,7 +765,6 @@ function (_SNPureCrypto) {
       });
     }
     /**
-     * @public
      * @param {string} password  Plain text string
      * @param {string} salt  Salt in hex format
      * @returns Hex string
@@ -924,28 +772,27 @@ function (_SNPureCrypto) {
 
   }, {
     key: "argon2",
-    value: function argon2(_ref2) {
-      var password, salt, iterations, bytes, length, result;
+    value: function argon2(password, salt, iterations, bytes, length) {
+      var result;
       return regeneratorRuntime.async(function argon2$(_context13) {
         while (1) {
           switch (_context13.prev = _context13.next) {
             case 0:
-              password = _ref2.password, salt = _ref2.salt, iterations = _ref2.iterations, bytes = _ref2.bytes, length = _ref2.length;
-              _context13.next = 3;
+              _context13.next = 2;
               return regeneratorRuntime.awrap(this.ready);
 
-            case 3:
+            case 2:
               _context13.t0 = this.sodium;
               _context13.t1 = length;
-              _context13.next = 7;
+              _context13.next = 6;
               return regeneratorRuntime.awrap(_Lib_web_utils__WEBPACK_IMPORTED_MODULE_1__["toBuffer"](password, 'binary'));
 
-            case 7:
+            case 6:
               _context13.t2 = _context13.sent;
-              _context13.next = 10;
+              _context13.next = 9;
               return regeneratorRuntime.awrap(_Lib_web_utils__WEBPACK_IMPORTED_MODULE_1__["toBuffer"](salt, 'hex'));
 
-            case 10:
+            case 9:
               _context13.t3 = _context13.sent;
               _context13.t4 = iterations;
               _context13.t5 = bytes;
@@ -953,7 +800,7 @@ function (_SNPureCrypto) {
               result = _context13.t0.crypto_pwhash.call(_context13.t0, _context13.t1, _context13.t2, _context13.t3, _context13.t4, _context13.t5, _context13.t6, 'hex');
               return _context13.abrupt("return", result);
 
-            case 16:
+            case 15:
             case "end":
               return _context13.stop();
           }
@@ -961,8 +808,8 @@ function (_SNPureCrypto) {
       }, null, this);
     }
     /**
-     * Encrypt a message (and optional associated data) with XChaCha20-Poly1305.
-     *
+     * Encrypt a message (and associated data) with XChaCha20-Poly1305.
+     * 
      * @param {String|Buffer} plaintext
      * @param {String} nonce  In hex format
      * @param {String} key   In hex format
@@ -1019,7 +866,7 @@ function (_SNPureCrypto) {
       }, null, this);
     }
     /**
-     * Decrypt a message (and optional associated data) with XChaCha20-Poly1305
+     * Decrypt a message (and associated data) with XChaCha20-Poly1305
      *
      * @param {String|Buffer} ciphertext
      * @param {String} nonce  In hex format
@@ -1093,7 +940,7 @@ function (_SNPureCrypto) {
 /*!*********************!*\
   !*** ./lib/main.js ***!
   \*********************/
-/*! exports provided: SNPureCrypto, SNWebCrypto, SNReactNativeCrypto, isWebCryptoAvailable, Buffer, base64Encode, base64Decode, base64ToHex */
+/*! exports provided: SNPureCrypto, SNWebCrypto, isWebCryptoAvailable, Buffer, base64Encode, base64Decode, base64ToHex, hexToBase64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1104,20 +951,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _crypto_webcrypto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./crypto/webcrypto */ "./lib/crypto/webcrypto.js");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SNWebCrypto", function() { return _crypto_webcrypto__WEBPACK_IMPORTED_MODULE_1__["SNWebCrypto"]; });
 
-/* harmony import */ var _crypto_react_native_crypto__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./crypto/react_native_crypto */ "./lib/crypto/react_native_crypto.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SNReactNativeCrypto", function() { return _crypto_react_native_crypto__WEBPACK_IMPORTED_MODULE_2__["SNReactNativeCrypto"]; });
+/* harmony import */ var _web_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./web_utils */ "./lib/web_utils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isWebCryptoAvailable", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_2__["isWebCryptoAvailable"]; });
 
-/* harmony import */ var _web_utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./web_utils */ "./lib/web_utils.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isWebCryptoAvailable", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_3__["isWebCryptoAvailable"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Buffer", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_2__["Buffer"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Buffer", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_3__["Buffer"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64Encode", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_2__["base64Encode"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64Encode", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_3__["base64Encode"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64Decode", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_2__["base64Decode"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64Decode", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_3__["base64Decode"]; });
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64ToHex", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_2__["base64ToHex"]; });
 
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64ToHex", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_3__["base64ToHex"]; });
-
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hexToBase64", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_2__["hexToBase64"]; });
 
 
 
@@ -1402,11 +1247,11 @@ function toHexBuffer(string) {
   });
 }
 /**
-* Coerce input to a Buffer, throwing a TypeError if it cannot be coerced.
-*
-* @param {string|Buffer|Uint8Array|Promise<Buffer>} stringOrBuffer
-* @returns {Buffer}
-*/
+ * Coerce input to a Buffer, throwing a TypeError if it cannot be coerced.
+ *
+ * @param {string|Buffer|Uint8Array|Promise<Buffer>} stringOrBuffer
+ * @returns {Buffer}
+ */
 
 function toBuffer(stringOrBuffer) {
   var format,
