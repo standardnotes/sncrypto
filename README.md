@@ -18,7 +18,7 @@ Cryptographic primitives used by [SNJS](https://github.com/standardnotes/snjs).
 
 ## Tests
 
-Tests must be run in the browser due to WebCrypto dependency.
+Tests must be run in the browser due to WebCrypto and WebAssembly dependency.
 
 1. `node test-server.js`
 2. Open browser to `http://localhost:9003/test/test.html`.

@@ -77,8 +77,8 @@ describe('crypto operations', async function () {
     const iv = await webCrypto.generateRandomKey(128);
     const key = await webCrypto.generateRandomKey(256);
     const text = 'hello world';
-    const encrypted = await webCrypto.aes256CbcEncrypt(text, key, iv);
-    const decrypted = await webCrypto.aes256CbcDecrypt(encrypted, key, iv);
+    const encrypted = await webCrypto.aes256CbcEncrypt(text, iv, key);
+    const decrypted = await webCrypto.aes256CbcDecrypt(encrypted, iv, key);
     expect(decrypted).to.equal(text);
   });
 
@@ -99,7 +99,7 @@ describe('crypto operations', async function () {
 
   it('sha1', async function () {
     const text = 'hello world';
-    const hash = await webCrypto.unsafe_sha1(text);
+    const hash = await webCrypto.unsafeSha1(text);
     const expected = '2aae6c35c94fcfb415dbe95f408b9ce91ee846ed';
     expect(hash).to.equal(expected);
   });

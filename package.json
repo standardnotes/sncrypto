@@ -1,11 +1,10 @@
 {
   "name": "sncrypto",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "main": "dist/sncrypto.js",
   "scripts": {
     "start": "webpack --mode development -w",
-    "bundle": "webpack --mode production",
-    "test": "mocha --require babel-register"
+    "bundle": "webpack --mode production"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.5",
@@ -42,9 +41,5 @@
     "typedarray-to-buffer": "^3.1.5",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
-  },
-  "peerDependencies": {
-    "base-64": "^0.1.0"
-  },
-  "dependencies": {}
+  }
 }
