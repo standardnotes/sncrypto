@@ -2,7 +2,6 @@ module.exports = function (api) {
   api.cache(true);
 
   const presets = [
-    "@babel/preset-react",
     ["@babel/preset-env", {
       "targets": {
         "chrome": "58",
@@ -12,6 +11,13 @@ module.exports = function (api) {
   ];
 
   const plugins = [
+    ['@babel/plugin-transform-runtime', {
+      "useESModules": true,
+      "regenerator": true,
+      "absoluteRuntime": false,
+      "corejs": false,
+      "helpers": false,
+    }],
     "@babel/plugin-proposal-class-properties",
     "@babel/plugin-syntax-dynamic-import"
   ];
