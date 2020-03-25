@@ -1,0 +1,19 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
+import '../dist/sncrypto.js';
+import '../node_modules/chai/chai.js';
+import './vendor/chai-as-promised-built.js';
+
+chai.use(chaiAsPromised);
+
+/**
+ * Simple empty test page to create and deinit empty page
+ * Then check browser Memory tool to make sure there are no leaks.
+ */
+describe('memory', async function () {
+  it('cleanup', function () {
+    this.webCrypto = new SNWebCrypto();
+    this.webCrypto.deinit();
+    this.webCrypto = null;
+  });
+});

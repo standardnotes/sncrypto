@@ -6,9 +6,15 @@ import './vendor/chai-as-promised-built.js';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
-const webCrypto = new SNWebCrypto();
 
 describe('crypto operations', async function () {
+  let webCrypto = new SNWebCrypto();
+
+  after(() => {
+    webCrypto.deinit();
+    webCrypto = null;
+  });
+
   it('webcrypto should be defined', function () {
     expect(window.crypto).to.not.be.null;
   });
@@ -62,7 +68,7 @@ describe('crypto operations', async function () {
 
   it('pbkdf2', async function () {
     const password = "correct horse battery staple";
-    const salt = Buffer.from('808182838485868788898a8b8c8d8e8f', 'hex');
+    const salt = '808182838485868788898a8b8c8d8e8f';
     const expected = '3a4dfcb30422c38facf3f8ba12390a5dd63a1853796ba9af112bff1bfac6d6cf';
     const result = await webCrypto.pbkdf2(
       password, 
@@ -169,12 +175,13 @@ describe('crypto operations', async function () {
       key,
       JSON.stringify({ uuid: 'foo' })
     );
-    expect(await webCrypto.xchacha20Decrypt(
+    const result = await webCrypto.xchacha20Decrypt(
       ciphertext,
       nonce,
       key,
       JSON.stringify({ uuid: 'bar' })
-    )).not.be.ok;
+    );
+    expect(result).to.not.be.ok;
   });
 
   it('xchacha predefined string', async function () {
