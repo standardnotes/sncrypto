@@ -306,8 +306,8 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
     /** 
      * Derives a key from a password and salt using PBKDF2 via WebCrypto.
      * @access public 
-     * @param {string} password
-     * @param {string} salt - In hex format
+     * @param {string} password - utf8 string
+     * @param {string} salt - utf8 string
      * @param {number} iterations
      * @param {number} length - In bits
      * @returns {Promise<string|null>} Hex string
@@ -747,7 +747,7 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
      * Performs WebCrypto PBKDF2 derivation.
      * @access private
      * @param {CryptoKey} key - A WebCrypto CryptoKey object
-     * @param {string} salt - In hex format
+     * @param {string} salt - In utf8 format
      * @param {number} iterations
      * @param {number} length - In bits
      * @returns {Promise<string|null>} Hex string
@@ -764,7 +764,7 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
               case 0:
                 _context10.t0 = WebCryptoAlgs.Pbkdf2;
                 _context10.next = 3;
-                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["hexStringToArrayBuffer"](salt);
+                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["stringToArrayBuffer"](salt);
 
               case 3:
                 _context10.t1 = _context10.sent;
@@ -1177,9 +1177,13 @@ function _stringToArrayBuffer() {
             throw Error('Attempting to convert non-string to arrayBuffer');
 
           case 2:
+            _context.next = 4;
+            return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
+
+          case 4:
             return _context.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["from_string"])(string));
 
-          case 3:
+          case 5:
           case "end":
             return _context.stop();
         }
@@ -1205,9 +1209,13 @@ function _arrayBufferToString() {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            _context2.next = 2;
+            return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
+
+          case 2:
             return _context2.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_string"])(arrayBuffer));
 
-          case 1:
+          case 3:
           case "end":
             return _context2.stop();
         }
@@ -1233,9 +1241,13 @@ function _arrayBufferToHexString() {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
+            _context3.next = 2;
+            return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
+
+          case 2:
             return _context3.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_hex"])(Buffer.from(arrayBuffer)));
 
-          case 1:
+          case 3:
           case "end":
             return _context3.stop();
         }
@@ -1261,9 +1273,13 @@ function _hexStringToArrayBuffer() {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
+            _context4.next = 2;
+            return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
+
+          case 2:
             return _context4.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["from_hex"])(hex));
 
-          case 1:
+          case 3:
           case "end":
             return _context4.stop();
         }
@@ -1289,9 +1305,13 @@ function _base64ToArrayBuffer() {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
+            _context5.next = 2;
+            return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
+
+          case 2:
             return _context5.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["from_base64"])(base64, _libsodium__WEBPACK_IMPORTED_MODULE_1__["base64_variants"].ORIGINAL));
 
-          case 1:
+          case 3:
           case "end":
             return _context5.stop();
         }
@@ -1317,9 +1337,13 @@ function _arrayBufferToBase() {
       while (1) {
         switch (_context6.prev = _context6.next) {
           case 0:
+            _context6.next = 2;
+            return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
+
+          case 2:
             return _context6.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_base64"])(Buffer.from(arrayBuffer), _libsodium__WEBPACK_IMPORTED_MODULE_1__["base64_variants"].ORIGINAL));
 
-          case 1:
+          case 3:
           case "end":
             return _context6.stop();
         }
@@ -1345,9 +1369,13 @@ function _hexToBase() {
       while (1) {
         switch (_context7.prev = _context7.next) {
           case 0:
+            _context7.next = 2;
+            return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
+
+          case 2:
             return _context7.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_base64"])(Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["from_hex"])(hex), _libsodium__WEBPACK_IMPORTED_MODULE_1__["base64_variants"].ORIGINAL));
 
-          case 1:
+          case 3:
           case "end":
             return _context7.stop();
         }
@@ -1373,9 +1401,13 @@ function _base64ToHex() {
       while (1) {
         switch (_context8.prev = _context8.next) {
           case 0:
+            _context8.next = 2;
+            return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
+
+          case 2:
             return _context8.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_hex"])(Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["from_base64"])(base64, _libsodium__WEBPACK_IMPORTED_MODULE_1__["base64_variants"].ORIGINAL)));
 
-          case 1:
+          case 3:
           case "end":
             return _context8.stop();
         }
@@ -1401,9 +1433,13 @@ function _base64Encode() {
       while (1) {
         switch (_context9.prev = _context9.next) {
           case 0:
+            _context9.next = 2;
+            return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
+
+          case 2:
             return _context9.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_base64"])(text, _libsodium__WEBPACK_IMPORTED_MODULE_1__["base64_variants"].ORIGINAL));
 
-          case 1:
+          case 3:
           case "end":
             return _context9.stop();
         }
@@ -1428,9 +1464,13 @@ function _base64Decode() {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
+            _context10.next = 2;
+            return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
+
+          case 2:
             return _context10.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_string"])(Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["from_base64"])(base64String, _libsodium__WEBPACK_IMPORTED_MODULE_1__["base64_variants"].ORIGINAL)));
 
-          case 1:
+          case 3:
           case "end":
             return _context10.stop();
         }

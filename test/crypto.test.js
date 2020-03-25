@@ -66,10 +66,23 @@ describe('crypto operations', async function () {
     expect(key.length).to.equal(64);
   });
 
-  it('pbkdf2', async function () {
+  it('pbkdf2 1', async function () {
+    const password = "very_secure";
+    const salt = 'c3feb78823adce65c4ab024dab9c5cdcda5a04cdbd98f65eac0311dfa432d67b';
+    const expected = 'bcad2c5a5f6778a562d72450b80ad21f66494e996cafc559b3cc0dd18b334d7d';
+    const result = await webCrypto.pbkdf2(
+      password,
+      salt,
+      100000,
+      256
+    );
+    expect(result).to.equal(expected);
+  });
+
+  it('pbkdf2 2', async function () {
     const password = "correct horse battery staple";
-    const salt = '808182838485868788898a8b8c8d8e8f';
-    const expected = '3a4dfcb30422c38facf3f8ba12390a5dd63a1853796ba9af112bff1bfac6d6cf';
+    const salt = Buffer.from('808182838485868788898a8b8c8d8e8f', 'hex').toString('utf8');
+    const expected = '1b85b9580337e03643d1b5ec6b186a629836a3916c6b327a2783cacca12bc785';
     const result = await webCrypto.pbkdf2(
       password, 
       salt, 
