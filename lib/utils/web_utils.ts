@@ -1,15 +1,22 @@
+declare global {
+  interface Document {
+    documentMode?: any;
+  }
+  interface Window {
+    msCrypto?: any
+  }
+}
+
 /**
  * Returns `window` if available, or `global` if supported in environment.
- * @returns {object|null}
  */
 export function getGlobalScope() {
-  return typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : null);
+  return window;
 }
 
 /**
  * Determines whether we are in an Internet Explorer or Edge environment
  * @access public
- * @returns {boolean}
  */
 export function ieOrEdge() {
   return (typeof document !== 'undefined' && document.documentMode) || /Edge/.test(navigator.userAgent);
@@ -18,7 +25,6 @@ export function ieOrEdge() {
 /**
  * Returns true if WebCrypto is available
  * @access public
- * @returns {boolean}
  */
 export function isWebCryptoAvailable() {
   return !ieOrEdge() && getGlobalScope().crypto && !!getGlobalScope().crypto.subtle;
@@ -27,7 +33,6 @@ export function isWebCryptoAvailable() {
 /**
  * Returns the WebCrypto instance
  * @access public
- * @returns {object}
  */
 export function getSubtleCrypto() {
   return getGlobalScope().crypto ? getGlobalScope().crypto.subtle : null;
@@ -36,7 +41,6 @@ export function getSubtleCrypto() {
 /**
  * Generates a UUID syncronously
  * @access public
- * @returns {string}
  */
 export function generateUUIDSync() {
   const globalScope = getGlobalScope();

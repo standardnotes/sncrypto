@@ -91,14 +91,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./lib/main.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./lib/index.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./lib/crypto/pure_crypto.js":
+/***/ "./lib/crypto/pure_crypto.ts":
 /*!***********************************!*\
-  !*** ./lib/crypto/pure_crypto.js ***!
+  !*** ./lib/crypto/pure_crypto.ts ***!
   \***********************************/
 /*! exports provided: SNPureCrypto */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -108,7 +108,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNPureCrypto", function() { return SNPureCrypto; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Lib_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @Lib/utils */ "./lib/utils/index.js");
+/* harmony import */ var _Lib_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @Lib/utils */ "./lib/utils/index.ts");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -133,14 +133,11 @@ var SNPureCrypto = /*#__PURE__*/function () {
 
   _createClass(SNPureCrypto, [{
     key: "deinit",
-
-    /** @access public */
     value: function deinit() {}
     /** Optional override */
 
     /**
      * Generates a UUID string syncronously.
-     * @returns {string}
      */
 
   }, {
@@ -151,7 +148,6 @@ var SNPureCrypto = /*#__PURE__*/function () {
     /**
      * Generates a UUID string asyncronously.
      * Can be overriden by native platforms to provide async implementation
-     * @returns {Promise<string>}
      */
 
   }, {
@@ -179,10 +175,9 @@ var SNPureCrypto = /*#__PURE__*/function () {
       return generateUUID;
     }()
     /**
-     * Constant-time string comparison 
+     * Constant-time string comparison
      * @param {string} a
      * @param {string} b
-     * @returns {boolean} Whether the strings are equal
      */
 
   }, {
@@ -211,9 +206,9 @@ var SNPureCrypto = /*#__PURE__*/function () {
 
 /***/ }),
 
-/***/ "./lib/crypto/webcrypto.js":
+/***/ "./lib/crypto/webcrypto.ts":
 /*!*********************************!*\
-  !*** ./lib/crypto/webcrypto.js ***!
+  !*** ./lib/crypto/webcrypto.ts ***!
   \*********************************/
 /*! exports provided: SNWebCrypto */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -223,9 +218,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SNWebCrypto", function() { return SNWebCrypto; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Crypto_pure_crypto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @Crypto/pure_crypto */ "./lib/crypto/pure_crypto.js");
-/* harmony import */ var _Lib_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @Lib/utils */ "./lib/utils/index.js");
-/* harmony import */ var _Lib_libsodium__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @Lib/libsodium */ "./lib/libsodium.js");
+/* harmony import */ var _Crypto_pure_crypto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @Crypto/pure_crypto */ "./lib/crypto/pure_crypto.ts");
+/* harmony import */ var _Lib_utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @Lib/utils */ "./lib/utils/index.ts");
+/* harmony import */ var _Lib_libsodium__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @Lib/libsodium */ "./lib/libsodium.ts");
 
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -257,22 +252,29 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-;
 var subtleCrypto = _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["getSubtleCrypto"]();
-var WebCryptoAlgs = {
-  AesCbc: 'AES-CBC',
-  Sha512: 'SHA-512',
-  Sha256: 'SHA-256',
-  Pbkdf2: 'PBKDF2',
-  Sha1: 'SHA-1',
-  Hmac: 'HMAC'
-};
-var WebCryptoActions = {
-  DeriveBits: 'deriveBits',
-  Encrypt: 'encrypt',
-  Decrypt: 'decrypt',
-  Sign: 'sign'
-};
+var WebCryptoAlgs;
+
+(function (WebCryptoAlgs) {
+  WebCryptoAlgs["AesCbc"] = "AES-CBC";
+  WebCryptoAlgs["Sha512"] = "SHA-512";
+  WebCryptoAlgs["Sha256"] = "SHA-256";
+  WebCryptoAlgs["Pbkdf2"] = "PBKDF2";
+  WebCryptoAlgs["Sha1"] = "SHA-1";
+  WebCryptoAlgs["Hmac"] = "HMAC";
+})(WebCryptoAlgs || (WebCryptoAlgs = {}));
+
+;
+var WebCryptoActions;
+
+(function (WebCryptoActions) {
+  WebCryptoActions["DeriveBits"] = "deriveBits";
+  WebCryptoActions["Encrypt"] = "encrypt";
+  WebCryptoActions["Decrypt"] = "decrypt";
+  WebCryptoActions["Sign"] = "sign";
+})(WebCryptoActions || (WebCryptoActions = {}));
+
+;
 /**
  * The web crypto class allows access to a set of cryptographic primitives available
  * in a web environment, consisting of two main sources:
@@ -289,7 +291,7 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
     _classCallCheck(this, SNWebCrypto);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(SNWebCrypto).call(this));
-    /** Functions using Libsodium must await this 
+    /** Functions using Libsodium must await this
      * promise before performing any library functions */
 
     _this.ready = _Lib_libsodium__WEBPACK_IMPORTED_MODULE_3__["ready"];
@@ -303,43 +305,47 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
 
       this.ready = null;
     }
-    /** 
+    /**
      * Derives a key from a password and salt using PBKDF2 via WebCrypto.
-     * @access public 
      * @param {string} password - utf8 string
      * @param {string} salt - utf8 string
      * @param {number} iterations
      * @param {number} length - In bits
-     * @returns {Promise<string|null>} Hex string
+     * @returns Hex string
      */
 
   }, {
     key: "pbkdf2",
     value: function () {
       var _pbkdf = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(password, salt, iterations, length) {
-        var key;
+        var keyData, key;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return this.webCryptoImportKey(password, WebCryptoAlgs.Pbkdf2, [WebCryptoActions.DeriveBits]);
+                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["stringToArrayBuffer"](password);
 
               case 2:
+                keyData = _context.sent;
+                _context.next = 5;
+                return this.webCryptoImportKey(keyData, WebCryptoAlgs.Pbkdf2, [WebCryptoActions.DeriveBits]);
+
+              case 5:
                 key = _context.sent;
 
                 if (key) {
-                  _context.next = 6;
+                  _context.next = 9;
                   break;
                 }
 
                 console.error('Key is null, unable to continue');
                 return _context.abrupt("return", null);
 
-              case 6:
+              case 9:
                 return _context.abrupt("return", this.webCryptoDeriveBits(key, salt, iterations, length));
 
-              case 7:
+              case 10:
               case "end":
                 return _context.stop();
             }
@@ -353,11 +359,10 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
 
       return pbkdf2;
     }()
-    /** 
+    /**
      * Generates a random key in hex format
-     * @access public
      * @param {number} bits - Length of key in bits
-     * @returns {Promise<string>} A string key in hex format
+     * @returns A string key in hex format
      */
 
   }, {
@@ -387,13 +392,12 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
 
       return generateRandomKey;
     }()
-    /** 
+    /**
      * Encrypts a string using AES-CBC via WebCrypto.
-     * @access public 
      * @param {string} plaintext
      * @param {string} iv - In hex format
      * @param {string} key - In hex format
-     * @returns {Promise<string>} Ciphertext in Base64 format.
+     * @returns Ciphertext in Base64 format.
      */
 
   }, {
@@ -457,11 +461,10 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
     }()
     /**
      * Decrypts a string using AES-CBC via WebCrypto.
-     * @access public
-     * @param {string} ciphertext - Base64 format
-     * @param {string} iv - In hex format
-     * @param {string} key - In hex format
-     * @returns {Promise<string|null>} Plain utf8 string or null if decryption fails
+     * @param ciphertext - Base64 format
+     * @param iv - In hex format
+     * @param key - In hex format
+     * @returns Plain utf8 string or null if decryption fails
      */
 
   }, {
@@ -516,8 +519,7 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
                   return function (_x12) {
                     return _ref.apply(this, arguments);
                   };
-                }()).catch(function (error) {
-                  console.error('Error performing AES-CBC decryption:', error);
+                }(), function (_) {
                   return null;
                 }));
 
@@ -535,19 +537,18 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
 
       return aes256CbcDecrypt;
     }()
-    /** 
+    /**
      * Runs HMAC with SHA-256 on a message with key.
-     * @access public 
-     * @param {string} message - Plain utf8 string
-     * @param {string} key - In hex format
-     * @returns {Promise<string|null>} Hex string or null if computation fails
+     * @param message - Plain utf8 string
+     * @param key - In hex format
+     * @returns Hex string or null if computation fails
      */
 
   }, {
     key: "hmac256",
     value: function () {
       var _hmac = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6(message, key) {
-        var keyHexData, keyData, messageData;
+        var keyHexData, keyData, messageData, funcParams;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
@@ -569,16 +570,17 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
 
               case 8:
                 messageData = _context6.sent;
-                return _context6.abrupt("return", crypto.subtle.sign({
+                funcParams = {
                   name: WebCryptoAlgs.Hmac
-                }, keyData, messageData).then(function (signature) {
+                };
+                return _context6.abrupt("return", crypto.subtle.sign(funcParams, keyData, messageData).then(function (signature) {
                   return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["arrayBufferToHexString"](signature);
-                }).catch(function (err) {
+                }, function (err) {
                   console.error('Error computing HMAC:', err);
                   return null;
                 }));
 
-              case 10:
+              case 11:
               case "end":
                 return _context6.stop();
             }
@@ -592,10 +594,9 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
 
       return hmac256;
     }()
-    /** 
-     * @access public 
+    /**
      * @param {string} text - Plain utf8 string
-     * @returns {Promise<string>} Hex string
+     * @returns Hex string
      */
 
   }, {
@@ -635,9 +636,8 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
     }()
     /**
      * Use only for legacy applications.
-     * @access public
      * @param {string} text - Plain utf8 string
-     * @returns {Promise<string>} Hex string
+     * @returns Hex string
      */
 
   }, {
@@ -675,61 +675,40 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
 
       return unsafeSha1;
     }()
-    /** 
+    /**
      * Converts a raw string key to a WebCrypto CryptoKey object.
-     * @access private 
-     * @param {string|Buffer} rawKey
+     * @param rawKey
      *    A plain utf8 string or an array buffer
-     * @param {string|WebCryptoAlgs} alg 
+     * @param alg
      *    The name of the algorithm this key will be used for (i.e 'AES-CBC' or 'HMAC')
-     * @param {Array.<string|WebCryptoActions>} actions 
+     * @param actions
      *    The actions this key will be used for (i.e 'deriveBits' or 'encrypt')
-     * @param {object} [hash] 
+     * @param hash
      *    An optional object representing the hashing function this key is intended to be
      *    used for. This option is only supplied when the `alg` is HMAC.
-     * @param {string|WebCryptoAlgs} hash.name
+     * @param hash.name
      *    The name of the hashing function to use with HMAC.
-     * @returns {Promise<CryptoKey|null>} A WebCrypto CryptoKey object
+     * @returns A WebCrypto CryptoKey object
      */
 
   }, {
     key: "webCryptoImportKey",
     value: function () {
-      var _webCryptoImportKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9(rawKey, alg, actions, hash) {
-        var keyData;
+      var _webCryptoImportKey = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9(keyData, alg, actions, hash) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
-                if (!_Lib_utils__WEBPACK_IMPORTED_MODULE_2__["isString"](rawKey)) {
-                  _context9.next = 6;
-                  break;
-                }
-
-                _context9.next = 3;
-                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["stringToArrayBuffer"](rawKey);
-
-              case 3:
-                _context9.t0 = _context9.sent;
-                _context9.next = 7;
-                break;
-
-              case 6:
-                _context9.t0 = rawKey;
-
-              case 7:
-                keyData = _context9.t0;
                 return _context9.abrupt("return", subtleCrypto.importKey('raw', keyData, {
                   name: alg,
                   hash: hash
                 }, false, actions).then(function (key) {
                   return key;
-                }).catch(function (err) {
-                  console.error(err);
+                }, function (_) {
                   return null;
                 }));
 
-              case 9:
+              case 1:
               case "end":
                 return _context9.stop();
             }
@@ -743,14 +722,13 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
 
       return webCryptoImportKey;
     }()
-    /** 
+    /**
      * Performs WebCrypto PBKDF2 derivation.
-     * @access private
      * @param {CryptoKey} key - A WebCrypto CryptoKey object
      * @param {string} salt - In utf8 format
      * @param {number} iterations
      * @param {number} length - In bits
-     * @returns {Promise<string|null>} Hex string
+     * @returns Hex string
      */
 
   }, {
@@ -780,9 +758,6 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
                 };
                 return _context10.abrupt("return", subtleCrypto.deriveBits(params, key, length).then(function (bits) {
                   return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["arrayBufferToHexString"](new Uint8Array(bits));
-                }).catch(function (err) {
-                  console.error(err);
-                  return null;
                 }));
 
               case 8:
@@ -800,14 +775,14 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
       return webCryptoDeriveBits;
     }()
     /**
-     * Derives a key from a password and salt using 
+     * Derives a key from a password and salt using
      * argon2id (crypto_pwhash_ALG_DEFAULT).
-     * @param {string} password - Plain text string
-     * @param {string} salt - Salt in hex format
-     * @param {string} iterations - The algorithm's opslimit (recommended min 2)
-     * @param {string} bytes - The algorithm's memory limit (memlimit) (recommended min 67108864)
-     * @param {string} length - The output key length
-     * @returns {Promise<string>} Derived key in hex format
+     * @param password - Plain text string
+     * @param salt - Salt in hex format
+     * @param iterations - The algorithm's opslimit (recommended min 2)
+     * @param bytes - The algorithm's memory limit (memlimit) (recommended min 67108864)
+     * @param length - The output key length
+     * @returns  Derived key in hex format
      */
 
   }, {
@@ -826,12 +801,12 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
                 _context11.t0 = _Lib_libsodium__WEBPACK_IMPORTED_MODULE_3__;
                 _context11.t1 = length;
                 _context11.next = 6;
-                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](password, 'binary');
+                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](password, _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["Format"].Binary);
 
               case 6:
                 _context11.t2 = _context11.sent;
                 _context11.next = 9;
-                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](salt, 'hex');
+                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](salt, _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["Format"].Hex);
 
               case 9:
                 _context11.t3 = _context11.sent;
@@ -857,11 +832,11 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
     }()
     /**
      * Encrypt a message (and associated data) with XChaCha20-Poly1305.
-     * @param {string|Buffer} plaintext
-     * @param {string|Buffer} nonce - In hex format
-     * @param {string|Buffer} key - In hex format
-     * @param {string|Buffer} assocData
-     * @returns {Promise<string>} Base64 ciphertext string
+     * @param plaintext
+     * @param nonce - In hex format
+     * @param key - In hex format
+     * @param assocData
+     * @returns Base64 ciphertext string
      */
 
   }, {
@@ -896,12 +871,12 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
               case 10:
                 _context12.t2 = _context12.sent;
                 _context12.next = 13;
-                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](nonce, 'hex');
+                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](nonce, _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["Format"].Hex);
 
               case 13:
                 _context12.t3 = _context12.sent;
                 _context12.next = 16;
-                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](key, 'hex');
+                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](key, _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["Format"].Hex);
 
               case 16:
                 _context12.t4 = _context12.sent;
@@ -923,11 +898,11 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
     }()
     /**
      * Decrypt a message (and associated data) with XChaCha20-Poly1305
-     * @param {string|Buffer} ciphertext
-     * @param {string|Buffer} nonce - In hex format
-     * @param {string|Buffer} key - In hex format
-     * @param {string|Buffer} assocData
-     * @returns {Promise<string|null>} Plain utf8 string or null if decryption fails
+     * @param ciphertext
+     * @param nonce - In hex format
+     * @param key - In hex format
+     * @param assocData
+     * @returns Plain utf8 string or null if decryption fails
      */
 
   }, {
@@ -953,7 +928,7 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
                 _context13.prev = 4;
                 _context13.t0 = _Lib_libsodium__WEBPACK_IMPORTED_MODULE_3__;
                 _context13.next = 8;
-                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](ciphertext, 'base64');
+                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](ciphertext, _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["Format"].Base64);
 
               case 8:
                 _context13.t1 = _context13.sent;
@@ -963,12 +938,12 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
               case 11:
                 _context13.t2 = _context13.sent;
                 _context13.next = 14;
-                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](nonce, 'hex');
+                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](nonce, _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["Format"].Hex);
 
               case 14:
                 _context13.t3 = _context13.sent;
                 _context13.next = 17;
-                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](key, 'hex');
+                return _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"](key, _Lib_utils__WEBPACK_IMPORTED_MODULE_2__["Format"].Hex);
 
               case 17:
                 _context13.t4 = _context13.sent;
@@ -1000,9 +975,57 @@ var SNWebCrypto = /*#__PURE__*/function (_SNPureCrypto) {
 
 /***/ }),
 
-/***/ "./lib/libsodium.js":
+/***/ "./lib/index.ts":
+/*!**********************!*\
+  !*** ./lib/index.ts ***!
+  \**********************/
+/*! exports provided: SNPureCrypto, SNWebCrypto, isWebCryptoAvailable, Buffer, stringToArrayBuffer, arrayBufferToString, arrayBufferToHexString, hexStringToArrayBuffer, base64ToArrayBuffer, arrayBufferToBase64, hexToBase64, base64ToHex, base64Encode, base64Decode, toBuffer */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _crypto_pure_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./crypto/pure_crypto */ "./lib/crypto/pure_crypto.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SNPureCrypto", function() { return _crypto_pure_crypto__WEBPACK_IMPORTED_MODULE_0__["SNPureCrypto"]; });
+
+/* harmony import */ var _crypto_webcrypto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./crypto/webcrypto */ "./lib/crypto/webcrypto.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SNWebCrypto", function() { return _crypto_webcrypto__WEBPACK_IMPORTED_MODULE_1__["SNWebCrypto"]; });
+
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils */ "./lib/utils/index.ts");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isWebCryptoAvailable", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["isWebCryptoAvailable"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Buffer", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["Buffer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stringToArrayBuffer", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["stringToArrayBuffer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "arrayBufferToString", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["arrayBufferToString"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "arrayBufferToHexString", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["arrayBufferToHexString"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hexStringToArrayBuffer", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["hexStringToArrayBuffer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64ToArrayBuffer", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["base64ToArrayBuffer"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "arrayBufferToBase64", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["arrayBufferToBase64"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hexToBase64", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["hexToBase64"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64ToHex", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["base64ToHex"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64Encode", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["base64Encode"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64Decode", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["base64Decode"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "toBuffer", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"]; });
+
+
+
+
+
+/***/ }),
+
+/***/ "./lib/libsodium.ts":
 /*!**************************!*\
-  !*** ./lib/libsodium.js ***!
+  !*** ./lib/libsodium.ts ***!
   \**************************/
 /*! exports provided: ready, crypto_pwhash, crypto_pwhash_ALG_DEFAULT, crypto_aead_xchacha20poly1305_ietf_encrypt, crypto_aead_xchacha20poly1305_ietf_decrypt, to_base64, from_base64, base64_variants, from_hex, to_hex, from_string, to_string */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -1040,64 +1063,16 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./lib/main.js":
-/*!*********************!*\
-  !*** ./lib/main.js ***!
-  \*********************/
-/*! exports provided: SNPureCrypto, SNWebCrypto, isWebCryptoAvailable, Buffer, stringToArrayBuffer, arrayBufferToString, arrayBufferToHexString, hexStringToArrayBuffer, base64ToArrayBuffer, arrayBufferToBase64, hexToBase64, base64ToHex, base64Encode, base64Decode, toBuffer */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _crypto_pure_crypto__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./crypto/pure_crypto */ "./lib/crypto/pure_crypto.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SNPureCrypto", function() { return _crypto_pure_crypto__WEBPACK_IMPORTED_MODULE_0__["SNPureCrypto"]; });
-
-/* harmony import */ var _crypto_webcrypto__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./crypto/webcrypto */ "./lib/crypto/webcrypto.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SNWebCrypto", function() { return _crypto_webcrypto__WEBPACK_IMPORTED_MODULE_1__["SNWebCrypto"]; });
-
-/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isWebCryptoAvailable", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["isWebCryptoAvailable"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Buffer", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["Buffer"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "stringToArrayBuffer", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["stringToArrayBuffer"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "arrayBufferToString", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["arrayBufferToString"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "arrayBufferToHexString", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["arrayBufferToHexString"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hexStringToArrayBuffer", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["hexStringToArrayBuffer"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64ToArrayBuffer", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["base64ToArrayBuffer"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "arrayBufferToBase64", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["arrayBufferToBase64"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "hexToBase64", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["hexToBase64"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64ToHex", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["base64ToHex"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64Encode", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["base64Encode"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64Decode", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["base64Decode"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "toBuffer", function() { return _utils__WEBPACK_IMPORTED_MODULE_2__["toBuffer"]; });
-
-
-
-
-
-/***/ }),
-
-/***/ "./lib/utils/common_utils.js":
+/***/ "./lib/utils/common_utils.ts":
 /*!***********************************!*\
-  !*** ./lib/utils/common_utils.js ***!
+  !*** ./lib/utils/common_utils.ts ***!
   \***********************************/
-/*! exports provided: Buffer, isString, stringToArrayBuffer, arrayBufferToString, arrayBufferToHexString, hexStringToArrayBuffer, base64ToArrayBuffer, arrayBufferToBase64, hexToBase64, base64ToHex, base64Encode, base64Decode, toBuffer */
+/*! exports provided: Buffer, Format, isString, stringToArrayBuffer, arrayBufferToString, arrayBufferToHexString, hexStringToArrayBuffer, base64ToArrayBuffer, arrayBufferToBase64, hexToBase64, base64ToHex, base64Encode, base64Decode, toBuffer */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Buffer", function() { return Buffer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Format", function() { return Format; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isString", function() { return isString; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stringToArrayBuffer", function() { return stringToArrayBuffer; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "arrayBufferToString", function() { return arrayBufferToString; });
@@ -1112,7 +1087,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toBuffer", function() { return toBuffer; });
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _libsodium__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../libsodium */ "./lib/libsodium.js");
+/* harmony import */ var _libsodium__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../libsodium */ "./lib/libsodium.ts");
+/* harmony import */ var typedarray_to_buffer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! typedarray-to-buffer */ "./node_modules/typedarray-to-buffer/index.js");
+/* harmony import */ var typedarray_to_buffer__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(typedarray_to_buffer__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var buffer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! buffer */ "./node_modules/node-libs-browser/node_modules/buffer/index.js");
+/* harmony import */ var buffer__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(buffer__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Buffer", function() { return buffer__WEBPACK_IMPORTED_MODULE_3__["Buffer"]; });
+
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -1126,21 +1107,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  * as may be returned by WebCrypto API.
  */
 
-var arrayToBuffer = __webpack_require__(/*! typedarray-to-buffer */ "./node_modules/typedarray-to-buffer/index.js");
-
-var Buffer = __webpack_require__(/*! buffer/ */ "./node_modules/node-libs-browser/node_modules/buffer/index.js").Buffer;
 
 
-var Format = {
-  Utf8: 'utf8',
-  Base64: 'base64',
-  Hex: 'hex',
-  Binary: 'binary'
-};
+
+var Format;
+
+(function (Format) {
+  Format["Utf8"] = "utf8";
+  Format["Base64"] = "base64";
+  Format["Hex"] = "hex";
+  Format["Binary"] = "binary";
+})(Format || (Format = {}));
+
+;
 /**
  * Determines if the input value is a string
- * @access public
- * @returns {boolean}
  */
 
 function isString(value) {
@@ -1148,9 +1129,7 @@ function isString(value) {
 }
 /**
  * Converts a plain string into an ArrayBuffer
- * @access public
  * @param {string} string - A plain string
- * @returns {ArrayBuffer}
  */
 
 function stringToArrayBuffer(_x) {
@@ -1158,9 +1137,7 @@ function stringToArrayBuffer(_x) {
 }
 /**
  * Converts an ArrayBuffer into a plain string
- * @access public
  * @param {ArrayBuffer} arrayBuffer
- * @returns {string} Plain string
  */
 
 function _stringToArrayBuffer() {
@@ -1198,9 +1175,7 @@ function arrayBufferToString(_x2) {
 }
 /**
  * Converts an ArrayBuffer into a hex string
- * @access public
- * @param {ArrayBuffer} arrayBuffer
- * @returns {string} Hex string
+ * @param arrayBuffer
  */
 
 function _arrayBufferToString() {
@@ -1231,8 +1206,7 @@ function arrayBufferToHexString(_x3) {
 /**
  * Converts a hex string into an ArrayBuffer
  * @access public
- * @param {string} hex - A hex string
- * @returns {ArrayBuffer}
+ * @param hex - A hex string
  */
 
 function _arrayBufferToHexString() {
@@ -1245,7 +1219,7 @@ function _arrayBufferToHexString() {
             return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
 
           case 2:
-            return _context3.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_hex"])(Buffer.from(arrayBuffer)));
+            return _context3.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_hex"])(buffer__WEBPACK_IMPORTED_MODULE_3__["Buffer"].from(arrayBuffer)));
 
           case 3:
           case "end":
@@ -1262,9 +1236,7 @@ function hexStringToArrayBuffer(_x4) {
 }
 /**
  * Converts a base64 string into an ArrayBuffer
- * @access public
- * @param {string} base64 - A base64 string
- * @returns {ArrayBuffer}
+ * @param base64 - A base64 string
  */
 
 function _hexStringToArrayBuffer() {
@@ -1294,9 +1266,7 @@ function base64ToArrayBuffer(_x5) {
 }
 /**
  * Converts an ArrayBuffer into a base64 string
- * @access public
- * @param {ArrayBuffer} buffer
- * @returns {string} base64 string
+ * @param buffer
  */
 
 function _base64ToArrayBuffer() {
@@ -1326,9 +1296,7 @@ function arrayBufferToBase64(_x6) {
 }
 /**
  * Converts a hex string into a base64 string
- * @access public
- * @param {string} hex - A hex string
- * @returns {string} A base64 string
+ * @param hex - A hex string
  */
 
 function _arrayBufferToBase() {
@@ -1341,7 +1309,7 @@ function _arrayBufferToBase() {
             return _libsodium__WEBPACK_IMPORTED_MODULE_1__["ready"];
 
           case 2:
-            return _context6.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_base64"])(Buffer.from(arrayBuffer), _libsodium__WEBPACK_IMPORTED_MODULE_1__["base64_variants"].ORIGINAL));
+            return _context6.abrupt("return", Object(_libsodium__WEBPACK_IMPORTED_MODULE_1__["to_base64"])(buffer__WEBPACK_IMPORTED_MODULE_3__["Buffer"].from(arrayBuffer), _libsodium__WEBPACK_IMPORTED_MODULE_1__["base64_variants"].ORIGINAL));
 
           case 3:
           case "end":
@@ -1358,9 +1326,7 @@ function hexToBase64(_x7) {
 }
 /**
  * Converts a base64 string into a hex string
- * @access public
- * @param {string} base64 - A base64 string
- * @returns {string} A hex string
+ * @param base64 - A base64 string
  */
 
 function _hexToBase() {
@@ -1390,9 +1356,8 @@ function base64ToHex(_x8) {
 }
 /**
  * Converts a plain string into base64
- * @access public
- * @param {string} text - A plain string
- * @returns {string} A base64 encoded string
+ * @param text - A plain string
+ * @returns  A base64 encoded string
  */
 
 function _base64ToHex() {
@@ -1422,9 +1387,8 @@ function base64Encode(_x9) {
 }
 /**
  * Converts a base64 string into a plain string
- * @access public
- * @param {string} base64String - A base64 encoded string
- * @returns {string} A plain string
+ * @param base64String - A base64 encoded string
+ * @returns A plain string
  */
 
 function _base64Encode() {
@@ -1454,8 +1418,8 @@ function base64Decode(_x10) {
 }
 /**
  * Coerce input to a Buffer, throwing a TypeError if it cannot be coerced.
- * @param {string|Buffer|Uint8Array|Promise<Buffer>} stringOrBuffer
- * @returns {Buffer}
+ * @param stringOrBuffer
+ * @returns
  */
 
 function _base64Decode() {
@@ -1494,7 +1458,7 @@ function _toBuffer() {
           case 0:
             format = _args11.length > 1 && _args11[1] !== undefined ? _args11[1] : Format.Binary;
 
-            if (!Buffer.isBuffer(stringOrBuffer)) {
+            if (!buffer__WEBPACK_IMPORTED_MODULE_3__["Buffer"].isBuffer(stringOrBuffer)) {
               _context11.next = 5;
               break;
             }
@@ -1515,7 +1479,7 @@ function _toBuffer() {
               break;
             }
 
-            return _context11.abrupt("return", Buffer.from(stringOrBuffer, format));
+            return _context11.abrupt("return", buffer__WEBPACK_IMPORTED_MODULE_3__["Buffer"].from(stringOrBuffer, format));
 
           case 13:
             if (!(stringOrBuffer instanceof Uint8Array)) {
@@ -1523,20 +1487,12 @@ function _toBuffer() {
               break;
             }
 
-            return _context11.abrupt("return", arrayToBuffer(stringOrBuffer));
+            return _context11.abrupt("return", typedarray_to_buffer__WEBPACK_IMPORTED_MODULE_2___default()(stringOrBuffer));
 
           case 17:
-            if (!(stringOrBuffer instanceof Promise)) {
-              _context11.next = 21;
-              break;
-            }
-
-            return _context11.abrupt("return", stringOrBuffer);
-
-          case 21:
             throw new TypeError('Invalid type; string or buffer expected');
 
-          case 22:
+          case 18:
           case "end":
             return _context11.stop();
         }
@@ -1548,16 +1504,16 @@ function _toBuffer() {
 
 /***/ }),
 
-/***/ "./lib/utils/index.js":
+/***/ "./lib/utils/index.ts":
 /*!****************************!*\
-  !*** ./lib/utils/index.js ***!
+  !*** ./lib/utils/index.ts ***!
   \****************************/
-/*! exports provided: getGlobalScope, ieOrEdge, isWebCryptoAvailable, getSubtleCrypto, generateUUIDSync, isString, Buffer, toBuffer, stringToArrayBuffer, arrayBufferToString, arrayBufferToHexString, hexStringToArrayBuffer, base64ToArrayBuffer, arrayBufferToBase64, hexToBase64, base64ToHex, base64Encode, base64Decode */
+/*! exports provided: getGlobalScope, ieOrEdge, isWebCryptoAvailable, getSubtleCrypto, generateUUIDSync, isString, Buffer, toBuffer, stringToArrayBuffer, arrayBufferToString, arrayBufferToHexString, hexStringToArrayBuffer, base64ToArrayBuffer, arrayBufferToBase64, hexToBase64, base64ToHex, base64Encode, base64Decode, Format */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _web_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./web_utils */ "./lib/utils/web_utils.js");
+/* harmony import */ var _web_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./web_utils */ "./lib/utils/web_utils.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getGlobalScope", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_0__["getGlobalScope"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ieOrEdge", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_0__["ieOrEdge"]; });
@@ -1568,7 +1524,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "generateUUIDSync", function() { return _web_utils__WEBPACK_IMPORTED_MODULE_0__["generateUUIDSync"]; });
 
-/* harmony import */ var _common_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common_utils */ "./lib/utils/common_utils.js");
+/* harmony import */ var _common_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./common_utils */ "./lib/utils/common_utils.ts");
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "isString", function() { return _common_utils__WEBPACK_IMPORTED_MODULE_1__["isString"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Buffer", function() { return _common_utils__WEBPACK_IMPORTED_MODULE_1__["Buffer"]; });
@@ -1595,36 +1551,36 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "base64Decode", function() { return _common_utils__WEBPACK_IMPORTED_MODULE_1__["base64Decode"]; });
 
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "Format", function() { return _common_utils__WEBPACK_IMPORTED_MODULE_1__["Format"]; });
+
 
 
 
 /***/ }),
 
-/***/ "./lib/utils/web_utils.js":
+/***/ "./lib/utils/web_utils.ts":
 /*!********************************!*\
-  !*** ./lib/utils/web_utils.js ***!
+  !*** ./lib/utils/web_utils.ts ***!
   \********************************/
 /*! exports provided: getGlobalScope, ieOrEdge, isWebCryptoAvailable, getSubtleCrypto, generateUUIDSync */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGlobalScope", function() { return getGlobalScope; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGlobalScope", function() { return getGlobalScope; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ieOrEdge", function() { return ieOrEdge; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isWebCryptoAvailable", function() { return isWebCryptoAvailable; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getSubtleCrypto", function() { return getSubtleCrypto; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "generateUUIDSync", function() { return generateUUIDSync; });
 /**
  * Returns `window` if available, or `global` if supported in environment.
- * @returns {object|null}
  */
 function getGlobalScope() {
-  return typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : null;
+  return window;
 }
 /**
  * Determines whether we are in an Internet Explorer or Edge environment
  * @access public
- * @returns {boolean}
  */
 
 function ieOrEdge() {
@@ -1633,7 +1589,6 @@ function ieOrEdge() {
 /**
  * Returns true if WebCrypto is available
  * @access public
- * @returns {boolean}
  */
 
 function isWebCryptoAvailable() {
@@ -1642,7 +1597,6 @@ function isWebCryptoAvailable() {
 /**
  * Returns the WebCrypto instance
  * @access public
- * @returns {object}
  */
 
 function getSubtleCrypto() {
@@ -1651,7 +1605,6 @@ function getSubtleCrypto() {
 /**
  * Generates a UUID syncronously
  * @access public
- * @returns {string}
  */
 
 function generateUUIDSync() {
@@ -1683,7 +1636,6 @@ function generateUUIDSync() {
     return uuid;
   }
 }
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 

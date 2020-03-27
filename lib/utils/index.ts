@@ -20,4 +20,5 @@ export {
   base64ToHex,
   base64Encode,
   base64Decode,
+  Format
 } from './common_utils';

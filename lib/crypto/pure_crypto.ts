@@ -5,25 +5,22 @@ import { generateUUIDSync } from "@Lib/utils";
  */
 export class SNPureCrypto {
 
-  /** @access public */
-  deinit() {
+  public deinit() {
     /** Optional override */
   }
 
   /**
    * Generates a UUID string syncronously.
-   * @returns {string}
    */
-  generateUUIDSync() {
+  public generateUUIDSync() {
     return generateUUIDSync();
   }
 
   /**
    * Generates a UUID string asyncronously.
    * Can be overriden by native platforms to provide async implementation
-   * @returns {Promise<string>}
    */
-  async generateUUID() {
+  public async generateUUID() {
     return generateUUIDSync();
   }
 
@@ -31,9 +28,8 @@ export class SNPureCrypto {
    * Constant-time string comparison 
    * @param {string} a
    * @param {string} b
-   * @returns {boolean} Whether the strings are equal
    */
-  timingSafeEqual(a, b) {
+  public timingSafeEqual(a: string, b: string) {
     const strA = String(a);
     let strB = String(b);
     const lenA = strA.length;

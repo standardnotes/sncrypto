@@ -2,6 +2,7 @@ module.exports = function (api) {
   api.cache(true);
 
   const presets = [
+    '@babel/typescript',
     ["@babel/preset-env", {
       "targets": {
         "chrome": "58",
