@@ -46,14 +46,6 @@ export class SNWebCrypto extends SNPureCrypto {
     this.ready = null;
   }
 
-  /** 
-   * Derives a key from a password and salt using PBKDF2 via WebCrypto.
-   * @param {string} password - utf8 string
-   * @param {string} salt - utf8 string
-   * @param {number} iterations
-   * @param {number} length - In bits
-   * @returns Hex string
-   */
   public async pbkdf2(
     password: string,
     salt: string,
@@ -73,24 +65,12 @@ export class SNWebCrypto extends SNPureCrypto {
     return this.webCryptoDeriveBits(key, salt, iterations, length);
   }
 
-  /** 
-   * Generates a random key in hex format
-   * @param {number} bits - Length of key in bits
-   * @returns A string key in hex format
-   */
   public async generateRandomKey(bits: number) {
     const bytes = bits / 8;
     const arrayBuffer = Utils.getGlobalScope().crypto.getRandomValues(new Uint8Array(bytes));
     return Utils.arrayBufferToHexString(arrayBuffer);
   }
 
-  /** 
-   * Encrypts a string using AES-CBC via WebCrypto.
-   * @param {string} plaintext
-   * @param {string} iv - In hex format
-   * @param {string} key - In hex format
-   * @returns Ciphertext in Base64 format.
-   */
   public async aes256CbcEncrypt(plaintext: string, iv: string, key: string) {
     const keyData = await Utils.hexStringToArrayBuffer(key);
     const ivData = await Utils.hexStringToArrayBuffer(iv);
@@ -110,13 +90,6 @@ export class SNWebCrypto extends SNPureCrypto {
     return ciphertext;
   }
 
-  /**
-   * Decrypts a string using AES-CBC via WebCrypto.
-   * @param ciphertext - Base64 format
-   * @param iv - In hex format
-   * @param key - In hex format
-   * @returns Plain utf8 string or null if decryption fails
-   */
   public async aes256CbcDecrypt(
     ciphertext: string,
     iv: string,
@@ -142,12 +115,6 @@ export class SNWebCrypto extends SNPureCrypto {
     });
   }
 
-  /** 
-   * Runs HMAC with SHA-256 on a message with key.
-   * @param message - Plain utf8 string
-   * @param key - In hex format
-   * @returns Hex string or null if computation fails
-   */
   public async hmac256(message: string, key: string) {
     const keyHexData = await Utils.hexStringToArrayBuffer(key);
     const keyData = await this.webCryptoImportKey(
@@ -170,21 +137,11 @@ export class SNWebCrypto extends SNPureCrypto {
     });
   }
 
-  /** 
-   * @param {string} text - Plain utf8 string
-   * @returns Hex string
-   */
   public async sha256(text: string) {
     const textData = await Utils.stringToArrayBuffer(text);
     const digest = await crypto.subtle.digest(WebCryptoAlgs.Sha256, textData);
     return Utils.arrayBufferToHexString(digest);
   }
-
-  /**
-   * Use only for legacy applications.
-   * @param {string} text - Plain utf8 string
-   * @returns Hex string
-   */
   public async unsafeSha1(text: string) {
     const textData = await Utils.stringToArrayBuffer(text);
     const digest = await crypto.subtle.digest(WebCryptoAlgs.Sha1, textData);
@@ -253,16 +210,6 @@ export class SNWebCrypto extends SNPureCrypto {
     });
   }
 
-  /**
-   * Derives a key from a password and salt using 
-   * argon2id (crypto_pwhash_ALG_DEFAULT).
-   * @param password - Plain text string
-   * @param salt - Salt in hex format
-   * @param iterations - The algorithm's opslimit (recommended min 2)
-   * @param bytes - The algorithm's memory limit (memlimit) (recommended min 67108864)
-   * @param length - The output key length
-   * @returns  Derived key in hex format
-   */
   public async argon2(
     password: string,
     salt: string,
@@ -283,14 +230,6 @@ export class SNWebCrypto extends SNPureCrypto {
     return result;
   }
 
-  /**
-   * Encrypt a message (and associated data) with XChaCha20-Poly1305.
-   * @param plaintext
-   * @param nonce - In hex format
-   * @param key - In hex format
-   * @param assocData
-   * @returns Base64 ciphertext string
-   */
   public async xchacha20Encrypt(
     plaintext: string,
     nonce: string,
@@ -311,14 +250,6 @@ export class SNWebCrypto extends SNPureCrypto {
     );
   }
 
-  /**
-   * Decrypt a message (and associated data) with XChaCha20-Poly1305
-   * @param ciphertext
-   * @param nonce - In hex format
-   * @param key - In hex format
-   * @param assocData
-   * @returns Plain utf8 string or null if decryption fails
-   */
   public async xchacha20Decrypt(
     ciphertext: string,
     nonce: string,
