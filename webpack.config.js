@@ -1,5 +1,4 @@
 const path = require('path');
-const DeclarationBundlerPlugin = require('declaration-bundler-webpack-plugin');
 module.exports = {
   entry: {
     "sncrypto.js": "./lib/index",
@@ -8,7 +7,6 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
-      "@Root": path.resolve(__dirname, "."),
       "@Lib": path.resolve(__dirname, "lib"),
       "@Crypto": path.resolve(__dirname, "lib/crypto")
     }
@@ -38,12 +36,7 @@ module.exports = {
       }
     ]
   },
-  plugins: [
-    new DeclarationBundlerPlugin({
-      moduleName: 'sncrypto',
-      out: 'sncrypto.d.ts',
-    })
-  ],
+  plugins: [],
   stats: {
     colors: true
   },

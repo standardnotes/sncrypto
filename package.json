@@ -2,11 +2,11 @@
   "name": "sncrypto",
   "version": "1.1.2",
   "main": "dist/sncrypto.js",
-  "types": "dist/sncrypto.d.ts",
+  "types": "dist/@types",
   "scripts": {
     "start": "webpack --mode development -w",
     "bundle": "webpack --mode production",
-    "check-types": "tsc"
+    "tsc": "tsc --project lib/tsconfig.json && tscpaths -p lib/tsconfig.json -s lib -o dist/@types"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -30,7 +30,6 @@
     "chai": "^4.2.0",
     "connect": "^3.7.0",
     "copy-webpack-plugin": "5.1.1",
-    "declaration-bundler-webpack-plugin": "github:smol/declaration-bundler-webpack-plugin#91bbfa5feb9136c4d91c443df63cee9a8439421b",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
     "eslint-config-semistandard": "^15.0.0",
@@ -47,6 +46,7 @@
     "script-loader": "^0.7.2",
     "serve-static": "^1.14.1",
     "ts-loader": "^6.2.2",
+    "tscpaths": "0.0.9",
     "typedarray-to-buffer": "^3.1.5",
     "typescript": "^3.8.3",
     "webpack": "^4.42.0",
