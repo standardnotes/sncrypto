@@ -7,6 +7,10 @@ declare global {
   }
 }
 
+function isWebEnvironment() {
+  return typeof document !== 'undefined';
+}
+
 /**
  * Returns `window` if available, or `global` if supported in environment.
  */
@@ -19,7 +23,7 @@ export function getGlobalScope() {
  * @access public
  */
 export function ieOrEdge() {
-  return (typeof document !== 'undefined' && document.documentMode) || /Edge/.test(navigator.userAgent);
+  return (isWebEnvironment() && document.documentMode) || /Edge/.test(navigator.userAgent);
 }
 
 /**
@@ -27,7 +31,7 @@ export function ieOrEdge() {
  * @access public
  */
 export function isWebCryptoAvailable() {
-  return !ieOrEdge() && getGlobalScope().crypto && !!getGlobalScope().crypto.subtle;
+  return isWebEnvironment() && !ieOrEdge() && getGlobalScope().crypto && !!getGlobalScope().crypto.subtle;
 }
 
 /**
@@ -35,7 +39,7 @@ export function isWebCryptoAvailable() {
  * @access public
  */
 export function getSubtleCrypto() {
-  return getGlobalScope().crypto ? getGlobalScope().crypto.subtle : null;
+  return isWebEnvironment() && getGlobalScope().crypto ? getGlobalScope().crypto.subtle : null;
 }
 
 /**
