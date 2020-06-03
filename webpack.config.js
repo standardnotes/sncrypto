@@ -1,4 +1,5 @@
 const path = require('path');
+
 module.exports = {
   entry: {
     "sncrypto.js": "./lib/index",
@@ -8,7 +9,8 @@ module.exports = {
     extensions: ['.ts', '.js'],
     alias: {
       "@Lib": path.resolve(__dirname, "lib"),
-      "@Crypto": path.resolve(__dirname, "lib/crypto")
+      "@Crypto": path.resolve(__dirname, "lib/crypto"),
+      'react-native': path.resolve(__dirname, "lib/utils/mock_react_native")
     }
   },
   output: {
