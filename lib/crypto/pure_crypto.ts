@@ -1,4 +1,4 @@
-import { generateUUIDSync, base64Decode, base64Encode } from "@Lib/utils";
+import { generateUUIDSync } from "@Lib/utils";
 
 /**
  * Abstract class with default implementations of basic helper functions.
@@ -123,18 +123,14 @@ export abstract class SNPureCrypto {
    * @param text - A plain string
    * @returns  A base64 encoded string
    */
-  public async base64Encode(text: string) {
-    return base64Encode(text);
-  }
+  public abstract async base64Encode(text: string): Promise<string>
 
   /**
    * Converts a base64 string into a plain string
    * @param base64String - A base64 encoded string
    * @returns A plain string
    */
-  public async base64Decode(base64String: string) {
-    return base64Decode(base64String);
-  }
+  public abstract async base64Decode(base64String: string): Promise<string>
 
   public deinit() {
     /** Optional override */

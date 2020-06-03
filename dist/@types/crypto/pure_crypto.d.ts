@@ -85,13 +85,13 @@ export declare abstract class SNPureCrypto {
      * @param text - A plain string
      * @returns  A base64 encoded string
      */
-    base64Encode(text: string): Promise<string>;
+    abstract base64Encode(text: string): Promise<string>;
     /**
      * Converts a base64 string into a plain string
      * @param base64String - A base64 encoded string
      * @returns A plain string
      */
-    base64Decode(base64String: string): Promise<string>;
+    abstract base64Decode(base64String: string): Promise<string>;
     deinit(): void;
     /**
      * Generates a UUID string syncronously.

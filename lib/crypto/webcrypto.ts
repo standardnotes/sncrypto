@@ -1,6 +1,6 @@
 import { SNPureCrypto } from '@Crypto/pure_crypto';
 import * as Utils from '@Lib/utils';
-import * as sodium from '@Lib/libsodium';
+import * as sodium from 'libsodium-wrappers';
 
 const subtleCrypto = Utils.getSubtleCrypto();
 
@@ -272,5 +272,13 @@ export class SNWebCrypto extends SNPureCrypto {
     } catch {
       return null;
     }
+  }
+
+  public async base64Encode(text: string) {
+    return Utils.base64Encode(text);
+  }
+
+  public async base64Decode(base64String: string) {
+    return Utils.base64Decode(base64String);
   }
 }

@@ -8,7 +8,7 @@ import {
   from_string,
   to_string,
   ready
-} from '../libsodium';
+} from 'libsodium-wrappers';
 
 /**
  * Libsodium's to_* functions take either a Buffer or String, but do not take raw buffers,
