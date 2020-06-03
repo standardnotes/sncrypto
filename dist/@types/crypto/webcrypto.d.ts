@@ -1,4 +1,4 @@
-import { SNPureCrypto } from './pure_crypto';
+import { SNPureCrypto } from '@Crypto/pure_crypto';
 /**
  * The web crypto class allows access to a set of cryptographic primitives available
  * in a web environment, consisting of two main sources:

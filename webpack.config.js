@@ -9,8 +9,7 @@ module.exports = {
     extensions: ['.ts', '.js'],
     alias: {
       "@Lib": path.resolve(__dirname, "lib"),
-      "@Crypto": path.resolve(__dirname, "lib/crypto"),
-      'react-native': path.resolve(__dirname, "lib/utils/mock_react_native")
+      "@Crypto": path.resolve(__dirname, "lib/crypto")
     }
   },
   output: {
