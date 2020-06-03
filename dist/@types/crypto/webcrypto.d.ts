@@ -44,4 +44,6 @@ export declare class SNWebCrypto extends SNPureCrypto {
     argon2(password: string, salt: string, iterations: number, bytes: number, length: number): Promise<string>;
     xchacha20Encrypt(plaintext: string, nonce: string, key: string, assocData: string): Promise<string>;
     xchacha20Decrypt(ciphertext: string, nonce: string, key: string, assocData: string): Promise<string | null>;
+    base64Encode(text: string): Promise<string>;
+    base64Decode(base64String: string): Promise<string>;
 }
