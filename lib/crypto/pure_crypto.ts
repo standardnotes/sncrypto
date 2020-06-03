@@ -1,11 +1,11 @@
-import { generateUUIDSync } from "@Lib/utils";
+import { generateUUIDSync, base64Decode, base64Encode } from "@Lib/utils";
 
 /**
  * Abstract class with default implementations of basic helper functions.
  */
 export abstract class SNPureCrypto {
 
-  /** 
+  /**
    * Derives a key from a password and salt using PBKDF2 via WebCrypto.
    * @param password - utf8 string
    * @param salt - utf8 string
@@ -20,14 +20,14 @@ export abstract class SNPureCrypto {
     length: number
   ): Promise<string | null>;
 
-  /** 
+  /**
    * Generates a random key in hex format
    * @param bits - Length of key in bits
    * @returns A string key in hex format
    */
   public abstract async generateRandomKey(bits: number): Promise<string>;
 
-  /** 
+  /**
    * Encrypts a string using AES-CBC via WebCrypto.
    * @param plaintext
    * @param iv - In hex format
@@ -49,7 +49,7 @@ export abstract class SNPureCrypto {
     key: string
   ): Promise<string | null>;
 
-  /** 
+  /**
    * Runs HMAC with SHA-256 on a message with key.
    * @param message - Plain utf8 string
    * @param key - In hex format
@@ -57,7 +57,7 @@ export abstract class SNPureCrypto {
    */
   public abstract async hmac256(message: string, key: string): Promise<string | null>;
 
-  /** 
+  /**
    * @param text - Plain utf8 string
    * @returns Hex string
    */
@@ -71,7 +71,7 @@ export abstract class SNPureCrypto {
   public abstract async unsafeSha1(text: string): Promise<string>;
 
   /**
-   * Derives a key from a password and salt using 
+   * Derives a key from a password and salt using
    * argon2id (crypto_pwhash_ALG_DEFAULT).
    * @param password - Plain text string
    * @param salt - Salt in hex format
@@ -118,6 +118,24 @@ export abstract class SNPureCrypto {
     assocData: string
   ): Promise<string | null>;
 
+  /**
+   * Converts a plain string into base64
+   * @param text - A plain string
+   * @returns  A base64 encoded string
+   */
+  public async base64Encode(text: string) {
+    return base64Encode(text);
+  }
+
+  /**
+   * Converts a base64 string into a plain string
+   * @param base64String - A base64 encoded string
+   * @returns A plain string
+   */
+  public async base64Decode(base64String: string) {
+    return base64Decode(base64String);
+  }
+
   public deinit() {
     /** Optional override */
   }
@@ -138,7 +156,7 @@ export abstract class SNPureCrypto {
   }
 
   /**
-   * Constant-time string comparison 
+   * Constant-time string comparison
    * @param a
    * @param b
    */

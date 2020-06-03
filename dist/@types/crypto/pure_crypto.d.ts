@@ -80,6 +80,18 @@ export declare abstract class SNPureCrypto {
      * @returns Plain utf8 string or null if decryption fails
      */
     abstract xchacha20Decrypt(ciphertext: string, nonce: string, key: string, assocData: string): Promise<string | null>;
+    /**
+     * Converts a plain string into base64
+     * @param text - A plain string
+     * @returns  A base64 encoded string
+     */
+    base64Encode(text: string): Promise<string>;
+    /**
+     * Converts a base64 string into a plain string
+     * @param base64String - A base64 encoded string
+     * @returns A plain string
+     */
+    base64Decode(base64String: string): Promise<string>;
     deinit(): void;
     /**
      * Generates a UUID string syncronously.
