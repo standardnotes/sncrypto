@@ -1,7 +1,4 @@
-declare const _default: {
-    NativeModules: {
-        Aes: {};
-        Sodium: {};
-    };
+export declare const NativeModules: {
+    Aes: {};
+    Sodium: {};
 };
-export default _default;

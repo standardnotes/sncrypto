@@ -1,6 +1,4 @@
-export default {
-    NativeModules: {
-      Aes: {},
-      Sodium: {},
-    },
-  };
+export const NativeModules = {
+    Aes: {},
+    Sodium: {}
+}
