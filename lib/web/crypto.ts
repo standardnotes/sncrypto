@@ -1,6 +1,6 @@
-import { SNPureCrypto } from '@Crypto/pure_crypto';
-import * as Utils from '@Lib/utils';
-import * as sodium from '@Lib/libsodium';
+import { SNPureCrypto } from '../common/pure_crypto';
+import * as Utils from './utils';
+import * as sodium from './libsodium';
 
 const subtleCrypto = Utils.getSubtleCrypto();
 
@@ -30,20 +30,38 @@ type WebCryptoParams = {
  * — Built-in browser WebCrypto
  * — Libsodium.js library integration
  */
-export class SNWebCrypto extends SNPureCrypto {
+export class SNWebCrypto implements SNPureCrypto {
 
   private ready: Promise<any> | null
 
   constructor() {
-    super();
-    /** Functions using Libsodium must await this 
+    /** Functions using Libsodium must await this
      * promise before performing any library functions */
     this.ready = sodium.ready;
   }
 
   deinit() {
-    super.deinit();
     this.ready = null;
+  }
+
+  public generateUUIDSync() {
+    return Utils.generateUUIDSync();
+  }
+
+  public async generateUUID() {
+    return Utils.generateUUIDSync();
+  }
+
+  public timingSafeEqual(a: string, b: string) {
+    return Utils.timingSafeEqual(a, b);
+  }
+
+  public async base64Encode(text: string) {
+    return Utils.base64Encode(text);
+  }
+
+  public async base64Decode(base64String: string) {
+    return Utils.base64Decode(base64String);
   }
 
   public async pbkdf2(
@@ -148,13 +166,13 @@ export class SNWebCrypto extends SNPureCrypto {
     return Utils.arrayBufferToHexString(digest);
   }
 
-  /** 
+  /**
    * Converts a raw string key to a WebCrypto CryptoKey object.
    * @param rawKey
    *    A plain utf8 string or an array buffer
-   * @param alg 
+   * @param alg
    *    The name of the algorithm this key will be used for (i.e 'AES-CBC' or 'HMAC')
-   * @param actions 
+   * @param actions
    *    The actions this key will be used for (i.e 'deriveBits' or 'encrypt')
    * @param hash
    *    An optional object representing the hashing function this key is intended to be
@@ -185,7 +203,7 @@ export class SNWebCrypto extends SNPureCrypto {
     });
   }
 
-  /** 
+  /**
    * Performs WebCrypto PBKDF2 derivation.
    * @param {CryptoKey} key - A WebCrypto CryptoKey object
    * @param {string} salt - In utf8 format

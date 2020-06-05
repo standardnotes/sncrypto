@@ -1,15 +1,7 @@
+export { SNWebCrypto } from './crypto';
 export {
-  getGlobalScope,
-  ieOrEdge,
   isWebCryptoAvailable,
-  getSubtleCrypto,
-  generateUUIDSync,
-} from './web_utils';
-
-export {
-  isString,
   Buffer,
-  toBuffer,
   stringToArrayBuffer,
   arrayBufferToString,
   arrayBufferToHexString,
@@ -20,5 +12,5 @@ export {
   base64ToHex,
   base64Encode,
   base64Decode,
-  Format
-} from './common_utils';
+  toBuffer,
+} from './utils';
