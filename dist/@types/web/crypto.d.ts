@@ -1,14 +1,19 @@
-import { SNPureCrypto } from './pure_crypto';
+import { SNPureCrypto } from '../common/pure_crypto';
 /**
  * The web crypto class allows access to a set of cryptographic primitives available
  * in a web environment, consisting of two main sources:
  * — Built-in browser WebCrypto
  * — Libsodium.js library integration
  */
-export declare class SNWebCrypto extends SNPureCrypto {
+export declare class SNWebCrypto implements SNPureCrypto {
     private ready;
     constructor();
     deinit(): void;
+    generateUUIDSync(): string;
+    generateUUID(): Promise<string>;
+    timingSafeEqual(a: string, b: string): boolean;
+    base64Encode(text: string): Promise<string>;
+    base64Decode(base64String: string): Promise<string>;
     pbkdf2(password: string, salt: string, iterations: number, length: number): Promise<string | null>;
     generateRandomKey(bits: number): Promise<string>;
     aes256CbcEncrypt(plaintext: string, iv: string, key: string): Promise<string>;

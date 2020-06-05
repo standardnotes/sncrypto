@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
-import '../dist/sncrypto.js';
 import '../node_modules/chai/chai.js';
 import './vendor/chai-as-promised-built.js';
 
@@ -42,7 +41,7 @@ describe('crypto operations', async function () {
   });
 
   it('compares strings with timing safe comparison', async function () {
-    const crypto = new SNPureCrypto();
+    const crypto = new SNWebCrypto();
     expect(crypto.timingSafeEqual("hello world", "hello world")).to.equal(true);
     expect(crypto.timingSafeEqual("helo world", "hello world")).to.equal(false);
     expect(crypto.timingSafeEqual("", "a")).to.equal(false);
@@ -84,9 +83,9 @@ describe('crypto operations', async function () {
     const salt = Buffer.from('808182838485868788898a8b8c8d8e8f', 'hex').toString('utf8');
     const expected = '1b85b9580337e03643d1b5ec6b186a629836a3916c6b327a2783cacca12bc785';
     const result = await webCrypto.pbkdf2(
-      password, 
-      salt, 
-      100000, 
+      password,
+      salt,
+      100000,
       256
     );
     expect(result).to.equal(expected);

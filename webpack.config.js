@@ -1,15 +1,11 @@
 const path = require('path');
 module.exports = {
   entry: {
-    "sncrypto.js": "./lib/index",
-    "sncrypto.min.js": "./lib/index"
+    "sncrypto-common.js": "./lib/common/index",
+    "sncrypto-web.js": "./lib/web/index",
   },
   resolve: {
-    extensions: ['.ts', '.js'],
-    alias: {
-      "@Lib": path.resolve(__dirname, "lib"),
-      "@Crypto": path.resolve(__dirname, "lib/crypto")
-    }
+    extensions: ['.ts', '.js']
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
