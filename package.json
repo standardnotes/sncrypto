@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack --mode development -w",
     "bundle": "webpack --mode production",
-    "tsc": "tsc --project lib/tsconfig.json"
+    "tsc": "tsc --project lib/tsconfig.json --emitDeclarationOnly"
   },
   "devDependencies": {
     "@babel/core": "^7.11.0",
