@@ -23,14 +23,14 @@ describe('crypto operations', async function () {
   });
 
   it('properly encodes base64', async function () {
-    const source = "hello world";
-    const target = "aGVsbG8gd29ybGQ=";
+    const source = "hello world 🌍";
+    const target = "aGVsbG8gd29ybGQg8J+MjQ==";
     expect(await base64Encode(source)).to.equal(target);
   });
 
   it('properly decodes base64', async function () {
-    const source = "aGVsbG8gd29ybGQ=";
-    const target = "hello world";
+    const source = "aGVsbG8gd29ybGQg8J+MjQ==";
+    const target = "hello world 🌍";
     expect(await base64Decode(source)).to.equal(target);
   });
 
@@ -42,8 +42,8 @@ describe('crypto operations', async function () {
 
   it('compares strings with timing safe comparison', async function () {
     const crypto = new SNWebCrypto();
-    expect(crypto.timingSafeEqual("hello world", "hello world")).to.equal(true);
-    expect(crypto.timingSafeEqual("helo world", "hello world")).to.equal(false);
+    expect(crypto.timingSafeEqual("hello world 🌍", "hello world 🌍")).to.equal(true);
+    expect(crypto.timingSafeEqual("helo world 🌍", "hello world 🌍")).to.equal(false);
     expect(crypto.timingSafeEqual("", "a")).to.equal(false);
     expect(crypto.timingSafeEqual("", "")).to.equal(true);
     expect(crypto.timingSafeEqual(
@@ -66,9 +66,9 @@ describe('crypto operations', async function () {
   });
 
   it('pbkdf2 1', async function () {
-    const password = "very_secure";
+    const password = "very_secure🔒";
     const salt = 'c3feb78823adce65c4ab024dab9c5cdcda5a04cdbd98f65eac0311dfa432d67b';
-    const expected = 'bcad2c5a5f6778a562d72450b80ad21f66494e996cafc559b3cc0dd18b334d7d';
+    const expected = 'bbb3d3af19dd1cbb901c958003faa55f193aad6a57fff30e51a62591bdc054d8';
     const result = await webCrypto.pbkdf2(
       password,
       salt,
@@ -79,9 +79,9 @@ describe('crypto operations', async function () {
   });
 
   it('pbkdf2 2', async function () {
-    const password = "correct horse battery staple";
+    const password = "correct horse battery staple ✅";
     const salt = Buffer.from('808182838485868788898a8b8c8d8e8f', 'hex').toString('utf8');
-    const expected = '1b85b9580337e03643d1b5ec6b186a629836a3916c6b327a2783cacca12bc785';
+    const expected = '795d83b18e55d860d3799f85a20f66ee17eb9dcf041df1d7a13fac30af7103d9';
     const result = await webCrypto.pbkdf2(
       password,
       salt,
@@ -94,36 +94,36 @@ describe('crypto operations', async function () {
   it('aes cbc', async function () {
     const iv = await webCrypto.generateRandomKey(128);
     const key = await webCrypto.generateRandomKey(256);
-    const text = 'hello world';
+    const text = 'hello world 🌍';
     const encrypted = await webCrypto.aes256CbcEncrypt(text, iv, key);
     const decrypted = await webCrypto.aes256CbcDecrypt(encrypted, iv, key);
     expect(decrypted).to.equal(text);
   });
 
   it('hmac 256', async function () {
-    const text = 'hello world';
+    const text = 'hello world 🌍';
     const key = 'e802dc953f3f1f7b5db62409b74ac848559d4711c4e0047ecc5e312ad8ab8397';
     const hash = await webCrypto.hmac256(text, key);
-    const expected = '41f1bb36cb21a3f5980fae0e93784156086c164631f8455a019adf8f45164fd7';
+    const expected = 'b63f94ee33a067ffac3ee97c7987dd3171dcdc747a322bb3f3ab890201c8e6f9';
     expect(hash).to.equal(expected);
   });
 
   it('sha256', async function () {
-    const text = 'hello world';
+    const text = 'hello world 🌍';
     const hash = await webCrypto.sha256(text);
-    const expected = 'b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9';
+    const expected = '1e71fe32476da1ff115b44dfd74aed5c90d68a1d80a2033065e30cff4335211a';
     expect(hash).to.equal(expected);
   });
 
   it('sha1', async function () {
-    const text = 'hello world';
+    const text = 'hello world 🌍';
     const hash = await webCrypto.unsafeSha1(text);
-    const expected = '2aae6c35c94fcfb415dbe95f408b9ce91ee846ed';
+    const expected = '0818667aed20ac104ca8f300f8df9753e1937983';
     expect(hash).to.equal(expected);
   });
 
   it('argon2 predefined salt', async function () {
-    const password = "correct horse battery staple";
+    const password = "correct horse battery staple ✅";
     const salt = Buffer.from('808182838485868788898a8b8c8d8e8f', 'hex');
     const bytes = 67108864;
     const length = 16;
@@ -135,14 +135,14 @@ describe('crypto operations', async function () {
       bytes,
       length
     );
-    const expectedResult = "720f95400220748a811bca9b8cff5d6e";
+    const expectedResult = "0aded8d318adc2fcf782291b5ee14239";
     expect(result).to.equal(expectedResult);
   });
 
   it('argon2 generated salt', async function () {
     const rawSalt = await webCrypto.sha256(['foo', 'bar'].join(":"));
     const truncatedSalt = rawSalt.substring(0, rawSalt.length / 2);
-    const password = "foobarfoo";
+    const password = "foobarfoo🔒";
     const bytes = 67108864;
     const length = 32;
     const iterations = 5;
@@ -153,15 +153,15 @@ describe('crypto operations', async function () {
       bytes,
       length
     );
-    const expected = "da1045d2dc34165edc9953391900c019342e12e9bfb7e9b3bc6c93445e0d82dc";
+    const expected = "ab795e298e4ee8c0a6175f099c89870c4f50512c54f79863a4c9566502b83fd9";
     expect(result).to.equal(expected);
   });
 
   it('xchacha20 encrypt/decrypt', async function () {
     const key = await webCrypto.generateRandomKey(256);
     const nonce = await webCrypto.generateRandomKey(192);
-    const plaintext = 'hello world';
-    const aad = JSON.stringify({ uuid: '123' });
+    const plaintext = 'hello world 🌍';
+    const aad = JSON.stringify({ uuid: '123🎤' });
     const ciphertext = await webCrypto.xchacha20Encrypt(
       plaintext,
       nonce,
@@ -180,30 +180,30 @@ describe('crypto operations', async function () {
   it('xchacha20 should fail with nonmatching aad', async function () {
     const key = await webCrypto.generateRandomKey(256);
     const nonce = await webCrypto.generateRandomKey(192);
-    const plaintext = 'hello world';
+    const plaintext = 'hello world 🌍';
     const ciphertext = await webCrypto.xchacha20Encrypt(
       plaintext,
       nonce,
       key,
-      JSON.stringify({ uuid: 'foo' })
+      JSON.stringify({ uuid: 'foo🎲' })
     );
     const result = await webCrypto.xchacha20Decrypt(
       ciphertext,
       nonce,
       key,
-      JSON.stringify({ uuid: 'bar' })
+      JSON.stringify({ uuid: 'bar🎲' })
     );
     expect(result).to.not.be.ok;
   });
 
   it('xchacha predefined string', async function () {
     /** Based on same Sodium-Plus test */
-    const plaintext = "Ladies and Gentlemen of the class of '99: If I could offer you only one tip for the future, sunscreen would be it.";
+    const plaintext = "Ladies and Gentlemen of the class of '99: If I could offer you only one tip for the future, sunscreen would be it.☀️";
     const assocData = Buffer.from('50515253c0c1c2c3c4c5c6c7', 'hex');
     const nonce = '404142434445464748494a4b4c4d4e4f5051525354555657';
     const key = '808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f';
     const ciphertext = await webCrypto.xchacha20Encrypt(plaintext, nonce, key, assocData);
-    const expected = "vW0XnT6D1DuVdleUk8DpOVcqFwAlK_rMvtKQLCE5bLtzHH8bC0qmRAvzqC9O2n45rmTGcIxUwhbLlrcuEhO0Ui-Mm6QNtdlFsRtpuYLBu54_P6wrw2lIj3ayODVl0__5IflmTJdjfal2iBL2FcaLE7UuwIdZJMHHmHlH3q_YeArPSQ";
+    const expected = "vW0XnT6D1DuVdleUk8DpOVcqFwAlK_rMvtKQLCE5bLtzHH8bC0qmRAvzqC9O2n45rmTGcIxUwhbLlrcuEhO0Ui-Mm6QNtdlFsRtpuYLBu54_P6wrw2lIj3ayODVl0__5IflmTJdjfal2iBL2FcaLE7UuKKs24MrJt7GFZzfvrTqlSB41CqFHrQ";
     expect(ciphertext).to.equal(expected);
     const decrypted = await webCrypto.xchacha20Decrypt(ciphertext, nonce, key, assocData);
     expect(decrypted).to.equal(plaintext);

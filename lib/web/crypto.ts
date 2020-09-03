@@ -259,8 +259,8 @@ export class SNWebCrypto implements SNPureCrypto {
       throw 'Nonce must be 24 bytes';
     }
     return sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
-      await Utils.toBuffer(plaintext),
-      await Utils.toBuffer(assocData),
+      plaintext,
+      assocData,
       null,
       await Utils.toBuffer(nonce, Utils.Format.Hex),
       await Utils.toBuffer(key, Utils.Format.Hex),
@@ -282,7 +282,7 @@ export class SNWebCrypto implements SNPureCrypto {
       return sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
         null,
         await Utils.toBuffer(ciphertext, Utils.Format.Base64),
-        await Utils.toBuffer(assocData),
+        await Utils.toBuffer(assocData, Utils.Format.Utf8),
         await Utils.toBuffer(nonce, Utils.Format.Hex),
         await Utils.toBuffer(key, Utils.Format.Hex),
         'text'

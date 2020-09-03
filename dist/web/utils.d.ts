@@ -1,3 +1,4 @@
+/// <reference types="node" />
 import { Buffer } from 'buffer';
 export { Buffer };
 declare global {
@@ -106,4 +107,4 @@ export declare function base64Decode(base64String: string): Promise<string>;
  * @param stringOrBuffer
  * @returns
  */
-export declare function toBuffer(stringOrBuffer: string | ArrayBuffer, format?: Format): Promise<any>;
+export declare function toBuffer(stringOrBuffer: string | ArrayBuffer, format: Format): Promise<Buffer>;

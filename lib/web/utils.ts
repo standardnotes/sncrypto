@@ -229,12 +229,10 @@ export async function base64Decode(base64String: string) {
  */
 export async function toBuffer(
   stringOrBuffer: string | ArrayBuffer,
-  format = Format.Binary
-) {
+  format: Format,
+): Promise<Buffer> {
   if (Buffer.isBuffer(stringOrBuffer)) {
     return stringOrBuffer;
-  } else if (stringOrBuffer === null) {
-    return null;
   } else if (typeof (stringOrBuffer) === 'string') {
     return Buffer.from(stringOrBuffer, format);
   } else if (stringOrBuffer instanceof Uint8Array) {
