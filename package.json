@@ -5,7 +5,7 @@
   "types": "dist/@types",
   "scripts": {
     "start": "webpack --mode development -w",
-    "bundle": "webpack --mode production",
+    "bundle": "webpack --mode production && npm run tsc",
     "tsc": "tsc --project lib/tsconfig.json --emitDeclarationOnly",
     "test": "node test-server.js"
   },
