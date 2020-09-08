@@ -31900,6 +31900,7 @@ var buffer = __webpack_require__(2);
 // CONCATENATED MODULE: ./lib/web/utils.ts
 /* eslint-disable camelcase */
 
+const SN_BASE64_VARIANT = libsodium_wrappers["base64_variants"].ORIGINAL_NO_PADDING;
 /**
  * Libsodium's to_* functions take either a Buffer or String, but do not take raw buffers,
  * as may be returned by WebCrypto API.
@@ -32061,7 +32062,7 @@ async function hexStringToArrayBuffer(hex) {
 
 async function base64ToArrayBuffer(base64) {
   await libsodium_wrappers["ready"];
-  return Object(libsodium_wrappers["from_base64"])(base64, libsodium_wrappers["base64_variants"].ORIGINAL);
+  return Object(libsodium_wrappers["from_base64"])(base64, SN_BASE64_VARIANT);
 }
 /**
  * Converts an ArrayBuffer into a base64 string
@@ -32070,7 +32071,7 @@ async function base64ToArrayBuffer(base64) {
 
 async function arrayBufferToBase64(arrayBuffer) {
   await libsodium_wrappers["ready"];
-  return Object(libsodium_wrappers["to_base64"])(buffer["Buffer"].from(arrayBuffer), libsodium_wrappers["base64_variants"].ORIGINAL);
+  return Object(libsodium_wrappers["to_base64"])(buffer["Buffer"].from(arrayBuffer), SN_BASE64_VARIANT);
 }
 /**
  * Converts a hex string into a base64 string
@@ -32079,7 +32080,7 @@ async function arrayBufferToBase64(arrayBuffer) {
 
 async function hexToBase64(hex) {
   await libsodium_wrappers["ready"];
-  return Object(libsodium_wrappers["to_base64"])(Object(libsodium_wrappers["from_hex"])(hex), libsodium_wrappers["base64_variants"].ORIGINAL);
+  return Object(libsodium_wrappers["to_base64"])(Object(libsodium_wrappers["from_hex"])(hex), SN_BASE64_VARIANT);
 }
 /**
  * Converts a base64 string into a hex string
@@ -32088,7 +32089,7 @@ async function hexToBase64(hex) {
 
 async function base64ToHex(base64) {
   await libsodium_wrappers["ready"];
-  return Object(libsodium_wrappers["to_hex"])(Object(libsodium_wrappers["from_base64"])(base64, libsodium_wrappers["base64_variants"].ORIGINAL));
+  return Object(libsodium_wrappers["to_hex"])(Object(libsodium_wrappers["from_base64"])(base64, SN_BASE64_VARIANT));
 }
 /**
  * Converts a plain string into base64
@@ -32098,7 +32099,7 @@ async function base64ToHex(base64) {
 
 async function base64Encode(text) {
   await libsodium_wrappers["ready"];
-  return Object(libsodium_wrappers["to_base64"])(text, libsodium_wrappers["base64_variants"].ORIGINAL);
+  return Object(libsodium_wrappers["to_base64"])(text, SN_BASE64_VARIANT);
 }
 /**
  * Converts a base64 string into a plain string
@@ -32108,7 +32109,7 @@ async function base64Encode(text) {
 
 async function base64Decode(base64String) {
   await libsodium_wrappers["ready"];
-  return Object(libsodium_wrappers["to_string"])(Object(libsodium_wrappers["from_base64"])(base64String, libsodium_wrappers["base64_variants"].ORIGINAL));
+  return Object(libsodium_wrappers["to_string"])(Object(libsodium_wrappers["from_base64"])(base64String, SN_BASE64_VARIANT));
 }
 /**
  * Coerce input to a Buffer, throwing a TypeError if it cannot be coerced.
@@ -32331,7 +32332,8 @@ class crypto_SNWebCrypto {
       throw 'Nonce must be 24 bytes';
     }
 
-    return libsodium_wrappers["crypto_aead_xchacha20poly1305_ietf_encrypt"](plaintext, assocData, null, (await toBuffer(nonce, Format.Hex)), (await toBuffer(key, Format.Hex)), 'base64');
+    const arrayBuffer = libsodium_wrappers["crypto_aead_xchacha20poly1305_ietf_encrypt"](plaintext, assocData, null, (await toBuffer(nonce, Format.Hex)), (await toBuffer(key, Format.Hex)));
+    return arrayBufferToBase64(arrayBuffer);
   }
 
   async xchacha20Decrypt(ciphertext, nonce, key, assocData) {

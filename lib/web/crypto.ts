@@ -258,14 +258,14 @@ export class SNWebCrypto implements SNPureCrypto {
     if (nonce.length !== 48) {
       throw 'Nonce must be 24 bytes';
     }
-    return sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
+    const arrayBuffer = sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
       plaintext,
       assocData,
       null,
       await Utils.toBuffer(nonce, Utils.Format.Hex),
-      await Utils.toBuffer(key, Utils.Format.Hex),
-      'base64'
+      await Utils.toBuffer(key, Utils.Format.Hex)
     );
+    return Utils.arrayBufferToBase64(arrayBuffer);
   }
 
   public async xchacha20Decrypt(

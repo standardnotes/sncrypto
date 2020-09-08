@@ -10,6 +10,8 @@ import {
   ready
 } from './libsodium';
 
+const SN_BASE64_VARIANT = base64_variants.ORIGINAL_NO_PADDING;
+
 /**
  * Libsodium's to_* functions take either a Buffer or String, but do not take raw buffers,
  * as may be returned by WebCrypto API.
@@ -172,7 +174,7 @@ export async function hexStringToArrayBuffer(hex: string) {
  */
 export async function base64ToArrayBuffer(base64: string) {
   await ready;
-  return from_base64(base64, base64_variants.ORIGINAL);
+  return from_base64(base64, SN_BASE64_VARIANT);
 }
 
 /**
@@ -181,7 +183,7 @@ export async function base64ToArrayBuffer(base64: string) {
  */
 export async function arrayBufferToBase64(arrayBuffer: ArrayBuffer) {
   await ready;
-  return to_base64(Buffer.from(arrayBuffer), base64_variants.ORIGINAL);
+  return to_base64(Buffer.from(arrayBuffer), SN_BASE64_VARIANT);
 }
 
 /**
@@ -190,7 +192,7 @@ export async function arrayBufferToBase64(arrayBuffer: ArrayBuffer) {
  */
 export async function hexToBase64(hex: string) {
   await ready;
-  return to_base64(from_hex(hex), base64_variants.ORIGINAL);
+  return to_base64(from_hex(hex), SN_BASE64_VARIANT);
 }
 
 /**
@@ -199,7 +201,7 @@ export async function hexToBase64(hex: string) {
  */
 export async function base64ToHex(base64: string) {
   await ready;
-  return to_hex(from_base64(base64, base64_variants.ORIGINAL));
+  return to_hex(from_base64(base64, SN_BASE64_VARIANT));
 }
 
 /**
@@ -209,7 +211,7 @@ export async function base64ToHex(base64: string) {
  */
 export async function base64Encode(text: string) {
   await ready;
-  return to_base64(text, base64_variants.ORIGINAL);
+  return to_base64(text, SN_BASE64_VARIANT);
 }
 
 /**
@@ -219,7 +221,7 @@ export async function base64Encode(text: string) {
  */
 export async function base64Decode(base64String: string) {
   await ready;
-  return to_string(from_base64(base64String, base64_variants.ORIGINAL));
+  return to_string(from_base64(base64String, SN_BASE64_VARIANT));
 }
 
 /**

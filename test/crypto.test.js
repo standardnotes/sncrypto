@@ -24,12 +24,12 @@ describe('crypto operations', async function () {
 
   it('properly encodes base64', async function () {
     const source = "hello world 🌍";
-    const target = "aGVsbG8gd29ybGQg8J+MjQ==";
+    const target = "aGVsbG8gd29ybGQg8J+MjQ";
     expect(await base64Encode(source)).to.equal(target);
   });
 
   it('properly decodes base64', async function () {
-    const source = "aGVsbG8gd29ybGQg8J+MjQ==";
+    const source = "aGVsbG8gd29ybGQg8J+MjQ";
     const target = "hello world 🌍";
     expect(await base64Decode(source)).to.equal(target);
   });
@@ -203,7 +203,7 @@ describe('crypto operations', async function () {
     const nonce = '404142434445464748494a4b4c4d4e4f5051525354555657';
     const key = '808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f';
     const ciphertext = await webCrypto.xchacha20Encrypt(plaintext, nonce, key, assocData);
-    const expected = "vW0XnT6D1DuVdleUk8DpOVcqFwAlK_rMvtKQLCE5bLtzHH8bC0qmRAvzqC9O2n45rmTGcIxUwhbLlrcuEhO0Ui-Mm6QNtdlFsRtpuYLBu54_P6wrw2lIj3ayODVl0__5IflmTJdjfal2iBL2FcaLE7UuKKs24MrJt7GFZzfvrTqlSB41CqFHrQ";
+    const expected = "vW0XnT6D1DuVdleUk8DpOVcqFwAlK/rMvtKQLCE5bLtzHH8bC0qmRAvzqC9O2n45rmTGcIxUwhbLlrcuEhO0Ui+Mm6QNtdlFsRtpuYLBu54/P6wrw2lIj3ayODVl0//5IflmTJdjfal2iBL2FcaLE7UuKKs24MrJt7GFZzfvrTqlSB41CqFHrQ";
     expect(ciphertext).to.equal(expected);
     const decrypted = await webCrypto.xchacha20Decrypt(ciphertext, nonce, key, assocData);
     expect(decrypted).to.equal(plaintext);
