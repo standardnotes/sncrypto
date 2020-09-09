@@ -38,23 +38,23 @@ describe('utils', async function () {
   it('base64Encode', async function () {
     const str = 'hello world';
     const b64 = await base64Encode(str);
-    expect(b64).to.equal('aGVsbG8gd29ybGQ');
+    expect(b64).to.equal('aGVsbG8gd29ybGQ=');
   });
 
   it('base64Decode', async function () {
-    const b64 = 'aGVsbG8gd29ybGQ';
+    const b64 = 'aGVsbG8gd29ybGQ=';
     const str = await base64Decode(b64);
     expect(str).to.equal('hello world');
   });
 
   it('base64ToArrayBuffer', async function () {
-    const b64 = 'aGVsbG8gd29ybGQ';
+    const b64 = 'aGVsbG8gd29ybGQ=';
     const buffer = await base64ToArrayBuffer(b64);
     expect(buffer.byteLength).to.equal(11);
   });
 
   it('arrayBufferToBase64', async function () {
-    const b64 = 'aGVsbG8gd29ybGQ';
+    const b64 = 'aGVsbG8gd29ybGQ=';
     const buffer = await base64ToArrayBuffer(b64);
     const result = await arrayBufferToBase64(buffer);
     expect(result).to.equal(b64);
@@ -63,11 +63,11 @@ describe('utils', async function () {
   it('hexToBase64', async function () {
     const hex = '68656c6c6f20776f726c64';
     const result = await hexToBase64(hex);
-    expect(result).to.equal('aGVsbG8gd29ybGQ');
+    expect(result).to.equal('aGVsbG8gd29ybGQ=');
   });
 
   it('base64ToHex', async function () {
-    const b64 = 'aGVsbG8gd29ybGQ';
+    const b64 = 'aGVsbG8gd29ybGQ=';
     const result = await base64ToHex(b64);
     expect(result).to.equal('68656c6c6f20776f726c64');
   });

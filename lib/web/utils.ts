@@ -10,7 +10,7 @@ import {
   ready
 } from './libsodium';
 
-const SN_BASE64_VARIANT = base64_variants.ORIGINAL_NO_PADDING;
+const SN_BASE64_VARIANT = base64_variants.ORIGINAL;
 
 /**
  * Libsodium's to_* functions take either a Buffer or String, but do not take raw buffers,
