@@ -2,6 +2,9 @@
 /* eslint-disable no-undef */
 import '../node_modules/chai/chai.js';
 import './vendor/chai-as-promised-built.js';
+import './vendor/buffer@5.6.0.js';
+
+const Buffer = window.buffer.Buffer;
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -123,8 +126,9 @@ describe('crypto operations', async function () {
   });
 
   it('argon2 predefined salt', async function () {
+    /** This differs from libsodium.js test matching below in that we include an emoji at the end */
     const password = "correct horse battery staple ✅";
-    const salt = Buffer.from('808182838485868788898a8b8c8d8e8f', 'hex');
+    const salt = '808182838485868788898a8b8c8d8e8f';
     const bytes = 67108864;
     const length = 16;
     const iterations = 2;
@@ -135,7 +139,7 @@ describe('crypto operations', async function () {
       bytes,
       length
     );
-    const expectedResult = "0aded8d318adc2fcf782291b5ee14239";
+    const expectedResult = "18dfbc268f251701652c8e38b5273f73";
     expect(result).to.equal(expectedResult);
   });
 
@@ -153,7 +157,7 @@ describe('crypto operations', async function () {
       bytes,
       length
     );
-    const expected = "ab795e298e4ee8c0a6175f099c89870c4f50512c54f79863a4c9566502b83fd9";
+    const expected = "bb6ec440708c271ce34decd7f997e2444d309b1105992779ccdb47f78a5fda6f";
     expect(result).to.equal(expected);
   });
 
@@ -197,15 +201,61 @@ describe('crypto operations', async function () {
   });
 
   it('xchacha predefined string', async function () {
-    /** Based on same Sodium-Plus test */
-    const plaintext = "Ladies and Gentlemen of the class of '99: If I could offer you only one tip for the future, sunscreen would be it.☀️";
-    const assocData = Buffer.from('50515253c0c1c2c3c4c5c6c7', 'hex');
+    /** This differs from libsodium.js test matching below in that we include an emoji at the end */
+    const plaintext = "Ladies and Gentlemen of the class of '99: If I could offer you only one tip for the future, sunscreen would be it.🌞";
+    const assocData = await hexStringToArrayBuffer('50515253c0c1c2c3c4c5c6c7');
     const nonce = '404142434445464748494a4b4c4d4e4f5051525354555657';
     const key = '808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f';
     const ciphertext = await webCrypto.xchacha20Encrypt(plaintext, nonce, key, assocData);
-    const expected = "vW0XnT6D1DuVdleUk8DpOVcqFwAlK/rMvtKQLCE5bLtzHH8bC0qmRAvzqC9O2n45rmTGcIxUwhbLlrcuEhO0Ui+Mm6QNtdlFsRtpuYLBu54/P6wrw2lIj3ayODVl0//5IflmTJdjfal2iBL2FcaLE7UuKKs24MrJt7GFZzfvrTqlSB41CqFHrQ==";
+    const expected = "vW0XnT6D1DuVdleUk8DpOVcqFwAlK/rMvtKQLCE5bLtzHH8bC0qmRAvzqC9O2n45rmTGcIxUwhbLlrcuEhO0Ui+Mm6QNtdlFsRtpuYLBu54/P6wrw2lIj3ayODVl0//5IflmTJdjfal2iBL2FcaLE7UuOqw6kdl7HV6PKzn0pIOeHH3rkwQ=";
     expect(ciphertext).to.equal(expected);
     const decrypted = await webCrypto.xchacha20Decrypt(ciphertext, nonce, key, assocData);
     expect(decrypted).to.equal(plaintext);
+  });
+
+  it('xchacha libsodium.js test matching', async function () {
+    /* Same values as https://github.com/jedisct1/libsodium.js/blob/master/test/sodium_utils.js */
+    const plaintext = Buffer.from(
+      '4c616469657320616e642047656e746c656d656e206f662074686520636c6173' +
+      '73206f66202739393a204966204920636f756c64206f6666657220796f75206f' +
+      '6e6c79206f6e652074697020666f7220746865206675747572652c2073756e73' +
+      '637265656e20776f756c642062652069742e',
+      'hex'
+    ).toString('utf8');
+    const assocData = Buffer.from('50515253c0c1c2c3c4c5c6c7', 'hex');
+    const nonce ='404142434445464748494a4b4c4d4e4f5051525354555657';
+    const key ='808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9f';
+
+    /** Encrypt */
+    const ciphertextBase64 = await webCrypto.xchacha20Encrypt(plaintext, nonce, key, assocData);
+    const ciphertextHex = await base64ToHex(ciphertextBase64);
+    const expected = 'bd6d179d3e83d43b9576579493c0e939572a1700252bfaccbed2902c21396cbb' +
+      '731c7f1b0b4aa6440bf3a82f4eda7e39ae64c6708c54c216cb96b72e1213b452' +
+      '2f8c9ba40db5d945b11b69b982c1bb9e3f3fac2bc369488f76b2383565d3fff9' +
+      '21f9664c97637da9768812f615c68b13b52e' +
+      'c0875924c1c7987947deafd8780acf49';
+    expect(ciphertextHex).to.equal(expected);
+
+    /** Decrypt */
+    const decrypted = await webCrypto.xchacha20Decrypt(ciphertextBase64, nonce, key, assocData);
+    expect(decrypted).to.equal(plaintext);
+  });
+
+  it('argon2 libsodium.js test matching', async function () {
+    /* Same values as https://github.com/jedisct1/libsodium.js/blob/master/test/sodium_utils.js */
+    const password = 'correct horse battery staple';
+    const salt = '808182838485868788898a8b8c8d8e8f';
+    const bytes = 67108864;
+    const length = 16;
+    const iterations = 2;
+    const result = await webCrypto.argon2(
+      password,
+      salt,
+      iterations,
+      bytes,
+      length
+    );
+    const expectedResult = "720f95400220748a811bca9b8cff5d6e";
+    expect(result).to.equal(expectedResult);
   });
 });

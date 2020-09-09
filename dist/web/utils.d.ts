@@ -1,6 +1,7 @@
-/// <reference types="node" />
-import { Buffer } from 'buffer';
-export { Buffer };
+/**
+ * Libsodium's to_* functions take either a Buffer or String, but do not take raw buffers,
+ * as may be returned by WebCrypto API.
+ */
 declare global {
     interface Document {
         documentMode?: any;
@@ -8,12 +9,6 @@ declare global {
     interface Window {
         msCrypto?: any;
     }
-}
-export declare enum Format {
-    Utf8 = "utf8",
-    Base64 = "base64",
-    Hex = "hex",
-    Binary = "binary"
 }
 /**
  * Returns `window` if available, or `global` if supported in environment.
@@ -102,9 +97,3 @@ export declare function base64Encode(text: string): Promise<string>;
  * @returns A plain string
  */
 export declare function base64Decode(base64String: string): Promise<string>;
-/**
- * Coerce input to a Buffer, throwing a TypeError if it cannot be coerced.
- * @param stringOrBuffer
- * @returns
- */
-export declare function toBuffer(stringOrBuffer: string | ArrayBuffer, format: Format): Promise<Buffer>;

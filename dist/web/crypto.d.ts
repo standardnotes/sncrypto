@@ -1,4 +1,4 @@
-import { SNPureCrypto } from '../common/pure_crypto';
+import { SNPureCrypto, HexString, Utf8String, Base64String } from '../common/pure_crypto';
 /**
  * The web crypto class allows access to a set of cryptographic primitives available
  * in a web environment, consisting of two main sources:
@@ -12,13 +12,13 @@ export declare class SNWebCrypto implements SNPureCrypto {
     generateUUIDSync(): string;
     generateUUID(): Promise<string>;
     timingSafeEqual(a: string, b: string): boolean;
-    base64Encode(text: string): Promise<string>;
-    base64Decode(base64String: string): Promise<string>;
-    pbkdf2(password: string, salt: string, iterations: number, length: number): Promise<string | null>;
+    base64Encode(text: Utf8String): Promise<string>;
+    base64Decode(base64String: Base64String): Promise<string>;
+    pbkdf2(password: Utf8String, salt: Utf8String, iterations: number, length: number): Promise<string | null>;
     generateRandomKey(bits: number): Promise<string>;
-    aes256CbcEncrypt(plaintext: string, iv: string, key: string): Promise<string>;
-    aes256CbcDecrypt(ciphertext: string, iv: string, key: string): Promise<string | null>;
-    hmac256(message: string, key: string): Promise<string | null>;
+    aes256CbcEncrypt(plaintext: Utf8String, iv: HexString, key: HexString): Promise<Base64String>;
+    aes256CbcDecrypt(ciphertext: Base64String, iv: HexString, key: HexString): Promise<Utf8String | null>;
+    hmac256(message: Utf8String, key: HexString): Promise<HexString | null>;
     sha256(text: string): Promise<string>;
     unsafeSha1(text: string): Promise<string>;
     /**
@@ -39,14 +39,11 @@ export declare class SNWebCrypto implements SNPureCrypto {
     private webCryptoImportKey;
     /**
      * Performs WebCrypto PBKDF2 derivation.
-     * @param {CryptoKey} key - A WebCrypto CryptoKey object
-     * @param {string} salt - In utf8 format
-     * @param {number} iterations
-     * @param {number} length - In bits
-     * @returns Hex string
+     * @param key - A WebCrypto CryptoKey object
+     * @param length - In bits
      */
     private webCryptoDeriveBits;
-    argon2(password: string, salt: string, iterations: number, bytes: number, length: number): Promise<string>;
-    xchacha20Encrypt(plaintext: string, nonce: string, key: string, assocData: string): Promise<string>;
-    xchacha20Decrypt(ciphertext: string, nonce: string, key: string, assocData: string): Promise<string | null>;
+    argon2(password: Utf8String, salt: HexString, iterations: number, bytes: number, length: number): Promise<HexString>;
+    xchacha20Encrypt(plaintext: Utf8String, nonce: HexString, key: HexString, assocData: Utf8String): Promise<Base64String>;
+    xchacha20Decrypt(ciphertext: Base64String, nonce: HexString, key: HexString, assocData: Utf8String | Uint8Array): Promise<Utf8String | null>;
 }

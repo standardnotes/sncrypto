@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
 import {
-  from_base64,
-  to_base64,
   base64_variants,
+  from_base64,
   from_hex,
-  to_hex,
   from_string,
-  to_string,
-  ready
+  ready,
+  to_base64,
+  to_hex,
+  to_string
 } from './libsodium';
 
 const SN_BASE64_VARIANT = base64_variants.ORIGINAL;
@@ -17,10 +17,6 @@ const SN_BASE64_VARIANT = base64_variants.ORIGINAL;
  * as may be returned by WebCrypto API.
  */
 
-import arrayToBuffer from 'typedarray-to-buffer';
-import { Buffer } from 'buffer';
-export { Buffer };
-
 declare global {
   interface Document {
     documentMode?: any;
@@ -29,13 +25,6 @@ declare global {
     msCrypto?: any
   }
 }
-
-export enum Format {
-  Utf8 = 'utf8',
-  Base64 = 'base64',
-  Hex = 'hex',
-  Binary = 'binary'
-};
 
 /**
  * Returns `window` if available, or `global` if supported in environment.
@@ -222,24 +211,4 @@ export async function base64Encode(text: string) {
 export async function base64Decode(base64String: string) {
   await ready;
   return to_string(from_base64(base64String, SN_BASE64_VARIANT));
-}
-
-/**
- * Coerce input to a Buffer, throwing a TypeError if it cannot be coerced.
- * @param stringOrBuffer
- * @returns
- */
-export async function toBuffer(
-  stringOrBuffer: string | ArrayBuffer,
-  format: Format,
-): Promise<Buffer> {
-  if (Buffer.isBuffer(stringOrBuffer)) {
-    return stringOrBuffer;
-  } else if (typeof (stringOrBuffer) === 'string') {
-    return Buffer.from(stringOrBuffer, format);
-  } else if (stringOrBuffer instanceof Uint8Array) {
-    return arrayToBuffer(stringOrBuffer);
-  } else {
-    throw new TypeError('Invalid type; string or buffer expected');
-  }
 }

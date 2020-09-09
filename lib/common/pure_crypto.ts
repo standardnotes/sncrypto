@@ -1,3 +1,7 @@
+export type HexString = string;
+export type Utf8String = string;
+export type Base64String = string;
+
 /**
  * Interface that clients have to implement to use snjs
  */
@@ -12,8 +16,8 @@ export interface SNPureCrypto {
    * @returns Hex string
    */
   pbkdf2(
-    password: string,
-    salt: string,
+    password: Utf8String,
+    salt: Utf8String,
     iterations: number,
     length: number
   ): Promise<string | null>;
@@ -32,7 +36,11 @@ export interface SNPureCrypto {
    * @param key - In hex format
    * @returns Ciphertext in Base64 format.
    */
-  aes256CbcEncrypt(plaintext: string, iv: string, key: string): Promise<string | null>;
+  aes256CbcEncrypt(
+    plaintext: Utf8String,
+    iv: HexString,
+    key: HexString
+  ): Promise<Base64String>;
 
   /**
    * Decrypts a string using AES-CBC via WebCrypto.
@@ -42,10 +50,10 @@ export interface SNPureCrypto {
    * @returns Plain utf8 string or null if decryption fails
    */
   aes256CbcDecrypt(
-    ciphertext: string,
-    iv: string,
-    key: string
-  ): Promise<string | null>;
+    ciphertext: Base64String,
+    iv: HexString,
+    key: HexString
+  ): Promise<Utf8String | null>;
 
   /**
    * Runs HMAC with SHA-256 on a message with key.
@@ -53,7 +61,10 @@ export interface SNPureCrypto {
    * @param key - In hex format
    * @returns Hex string or null if computation fails
    */
-  hmac256(message: string, key: string): Promise<string | null>;
+  hmac256(
+    message: Utf8String,
+    key: HexString
+  ): Promise<HexString | null>;
 
   /**
    * @param text - Plain utf8 string
@@ -79,12 +90,12 @@ export interface SNPureCrypto {
    * @returns Derived key in hex format
    */
   argon2(
-    password: string,
-    salt: string,
+    password: Utf8String,
+    salt: HexString,
     iterations: number,
     bytes: number,
     length: number
-  ): Promise<string>;
+  ): Promise<HexString>;
 
   /**
    * Encrypt a message (and associated data) with XChaCha20-Poly1305.
@@ -95,11 +106,11 @@ export interface SNPureCrypto {
    * @returns Base64 ciphertext string
    */
   xchacha20Encrypt(
-    plaintext: string,
-    nonce: string,
-    key: string,
-    assocData: string
-  ): Promise<string>;
+    plaintext: Utf8String,
+    nonce: HexString,
+    key: HexString,
+    assocData: Utf8String
+  ): Promise<Base64String>
 
   /**
    * Decrypt a message (and associated data) with XChaCha20-Poly1305
@@ -110,10 +121,10 @@ export interface SNPureCrypto {
    * @returns Plain utf8 string or null if decryption fails
    */
   xchacha20Decrypt(
-    ciphertext: string,
-    nonce: string,
-    key: string,
-    assocData: string
+    ciphertext: Base64String,
+    nonce: HexString,
+    key: HexString,
+    assocData: Utf8String | Uint8Array
   ): Promise<string | null>;
 
   /**
@@ -121,14 +132,14 @@ export interface SNPureCrypto {
    * @param text - A plain string
    * @returns  A base64 encoded string
    */
-  base64Encode(text: string): Promise<string>
+  base64Encode(text: Utf8String): Promise<string>
 
   /**
    * Converts a base64 string into a plain string
    * @param base64String - A base64 encoded string
    * @returns A plain string
    */
-  base64Decode(base64String: string): Promise<string>
+  base64Decode(base64String: Base64String): Promise<string>
 
   deinit(): void
 
