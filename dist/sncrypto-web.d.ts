@@ -1,2 +1,2 @@
 export { SNWebCrypto } from './web/crypto';
-export { isWebCryptoAvailable, stringToArrayBuffer, arrayBufferToString, arrayBufferToHexString, hexStringToArrayBuffer, base64ToArrayBuffer, arrayBufferToBase64, hexToBase64, base64ToHex, base64Encode, base64Decode } from './web/utils';
+export { arrayBufferToBase64, arrayBufferToHexString, arrayBufferToString, base64Decode, base64Encode, base64ToArrayBuffer, base64ToHex, hexStringToArrayBuffer, hexToBase64, isWebCryptoAvailable, stringToArrayBuffer } from './web/utils';

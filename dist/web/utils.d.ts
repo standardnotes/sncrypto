@@ -35,12 +35,6 @@ export declare function getSubtleCrypto(): SubtleCrypto | null;
  */
 export declare function generateUUIDSync(): string;
 /**
- * Constant-time string comparison
- * @param a
- * @param b
- */
-export declare function timingSafeEqual(a: string, b: string): boolean;
-/**
  * Determines if the input value is a string
  */
 export declare function isString(value: any): boolean;

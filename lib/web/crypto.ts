@@ -4,6 +4,7 @@ import {
   Utf8String,
   Base64String
 } from '../common/pure_crypto';
+import { timingSafeEqual } from '../common/utils';
 import * as Utils from './utils';
 import * as sodium from './libsodium';
 
@@ -59,7 +60,7 @@ export class SNWebCrypto implements SNPureCrypto {
   }
 
   public timingSafeEqual(a: string, b: string) {
-    return Utils.timingSafeEqual(a, b);
+    return timingSafeEqual(a, b);
   }
 
   public async base64Encode(text: Utf8String) {

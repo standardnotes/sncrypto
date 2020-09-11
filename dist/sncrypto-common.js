@@ -91,17 +91,50 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 112);
+/******/ 	return __webpack_require__(__webpack_require__.s = 113);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 112:
+/***/ 113:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(28);
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "timingSafeEqual", function() { return _utils__WEBPACK_IMPORTED_MODULE_0__["a"]; });
 
+
+
+/***/ }),
+
+/***/ 28:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return timingSafeEqual; });
+/**
+ * Constant-time string comparison
+ * @param a
+ * @param b
+ */
+function timingSafeEqual(a, b) {
+  const strA = String(a);
+  let strB = String(b);
+  const lenA = strA.length;
+  let result = 0;
+
+  if (lenA !== strB.length) {
+    strB = strA;
+    result = 1;
+  }
+
+  for (let i = 0; i < lenA; i++) {
+    result |= strA.charCodeAt(i) ^ strB.charCodeAt(i);
+  }
+
+  return result === 0;
+}
 
 /***/ })
 
