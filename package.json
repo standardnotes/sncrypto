@@ -1,15 +1,16 @@
 {
   "name": "@standardnotes/sncrypto",
-  "version": "1.2.1",
-  "main": "dist",
-  "types": "dist/@types",
+  "version": "1.2.2",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
+    "clean": "rm -fr dist",
     "start": "webpack --mode development -w",
-    "bundle": "webpack --mode production && npm run tsc",
-    "tsc": "tsc --project lib/tsconfig.json --emitDeclarationOnly",
+    "prebuild": "yarn clean",
+    "build": "webpack --mode production && tsc",
     "test": "node test-server.js"
   },
   "devDependencies": {
