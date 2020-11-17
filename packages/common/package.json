@@ -8,6 +8,9 @@
     "dist"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsc",
     "lint": "eslint . --ext .ts"

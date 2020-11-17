@@ -8,6 +8,9 @@
     "dist"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "webpack --mode production && tsc",
     "lint": "eslint . --ext .ts",
