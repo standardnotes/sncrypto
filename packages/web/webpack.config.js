@@ -1,8 +1,7 @@
 const path = require('path');
  module.exports = {
    entry: {
-     "sncrypto-common.js": "./lib/common/index",
-     "sncrypto-web.js": "./lib/web/index",
+     "sncrypto-web.js": "./src/index",
    },
    resolve: {
      extensions: ['.ts', '.js']

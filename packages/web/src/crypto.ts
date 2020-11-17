@@ -5,9 +5,9 @@ import {
   Base64String,
   HexString,
   SNPureCrypto,
-  Utf8String
-} from '../common/pure_crypto'
-import { timingSafeEqual } from '../common/utils'
+  Utf8String,
+  timingSafeEqual
+} from '@standardnotes/sncrypto-common'
 
 const subtleCrypto = Utils.getSubtleCrypto()
 

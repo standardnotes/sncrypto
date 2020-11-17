@@ -15,10 +15,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-          registry-url: https://npm.pkg.github.com/
-          scope: '@standardnotes'
-      - run: npm ci
-      - run: npm run build
-      - run: npm publish
+      - run: yarn install --frozen-lockfile
+      - run: lerna run build
+      - run: lerna publish from-package --yes
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
