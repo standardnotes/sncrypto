@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-undef */
-import '../node_modules/chai/chai.js';
 import './vendor/chai-as-promised-built.js';
 
 chai.use(chaiAsPromised);

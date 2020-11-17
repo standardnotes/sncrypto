@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "allowJs": true,
     "strict": true,
@@ -8,7 +9,7 @@
     "esModuleInterop": true,
     "declaration": true,
     "outDir": "dist",
-    "sourceMap": false,
+    "inlineSourceMap": true,
     "types": [
       "node"
     ],
@@ -18,7 +19,7 @@
     ]
   },
   "include": [
-    "lib/**/*",
+    "src/**/*",
     "typings/**/*"
   ],
   "exclude": [

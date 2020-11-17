@@ -1,0 +1,20 @@
+{
+  "name": "@standardnotes/sncrypto-web",
+  "version": "1.2.7",
+  "description": "SNCrypto Web",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --mode production && tsc",
+    "lint": "eslint . --ext .ts",
+    "test": "node test-server.js"
+  },
+  "dependencies": {
+    "@standardnotes/sncrypto-common": "^1.2.7",
+    "libsodium-wrappers": "^0.7.8"
+  }
+}
