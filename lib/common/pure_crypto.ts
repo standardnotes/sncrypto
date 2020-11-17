@@ -1,6 +1,6 @@
-export type HexString = string;
-export type Utf8String = string;
-export type Base64String = string;
+export type HexString = string
+export type Utf8String = string
+export type Base64String = string
 
 /**
  * Interface that clients have to implement to use snjs
@@ -20,14 +20,14 @@ export interface SNPureCrypto {
     salt: Utf8String,
     iterations: number,
     length: number
-  ): Promise<string | null>;
+  ): Promise<string | null>
 
   /**
    * Generates a random key in hex format
    * @param bits - Length of key in bits
    * @returns A string key in hex format
    */
-  generateRandomKey(bits: number): Promise<string>;
+  generateRandomKey(bits: number): Promise<string>
 
   /**
    * Encrypts a string using AES-CBC via WebCrypto.
@@ -40,7 +40,7 @@ export interface SNPureCrypto {
     plaintext: Utf8String,
     iv: HexString,
     key: HexString
-  ): Promise<Base64String>;
+  ): Promise<Base64String>
 
   /**
    * Decrypts a string using AES-CBC via WebCrypto.
@@ -53,7 +53,7 @@ export interface SNPureCrypto {
     ciphertext: Base64String,
     iv: HexString,
     key: HexString
-  ): Promise<Utf8String | null>;
+  ): Promise<Utf8String | null>
 
   /**
    * Runs HMAC with SHA-256 on a message with key.
@@ -64,20 +64,20 @@ export interface SNPureCrypto {
   hmac256(
     message: Utf8String,
     key: HexString
-  ): Promise<HexString | null>;
+  ): Promise<HexString | null>
 
   /**
    * @param text - Plain utf8 string
    * @returns Hex string
    */
-  sha256(text: string): Promise<string>;
+  sha256(text: string): Promise<string>
 
   /**
    * Use only for legacy applications.
    * @param text - Plain utf8 string
    * @returns Hex string
    */
-  unsafeSha1(text: string): Promise<string>;
+  unsafeSha1(text: string): Promise<string>
 
   /**
    * Derives a key from a password and salt using
@@ -95,7 +95,7 @@ export interface SNPureCrypto {
     iterations: number,
     bytes: number,
     length: number
-  ): Promise<HexString>;
+  ): Promise<HexString>
 
   /**
    * Encrypt a message (and associated data) with XChaCha20-Poly1305.
@@ -125,7 +125,7 @@ export interface SNPureCrypto {
     nonce: HexString,
     key: HexString,
     assocData: Utf8String | Uint8Array
-  ): Promise<string | null>;
+  ): Promise<string | null>
 
   /**
    * Converts a plain string into base64

@@ -1,14 +1,15 @@
-import {
-  SNPureCrypto,
-  HexString,
-  Utf8String,
-  Base64String
-} from '../common/pure_crypto';
-import { timingSafeEqual } from '../common/utils';
-import * as Utils from './utils';
-import * as sodium from './libsodium';
+import * as Utils from './utils'
+import * as sodium from './libsodium'
 
-const subtleCrypto = Utils.getSubtleCrypto();
+import {
+  Base64String,
+  HexString,
+  SNPureCrypto,
+  Utf8String
+} from '../common/pure_crypto'
+import { timingSafeEqual } from '../common/utils'
+
+const subtleCrypto = Utils.getSubtleCrypto()
 
 enum WebCryptoAlgs {
   AesCbc = 'AES-CBC',
@@ -17,14 +18,14 @@ enum WebCryptoAlgs {
   Pbkdf2 = 'PBKDF2',
   Sha1 = 'SHA-1',
   Hmac = 'HMAC'
-};
+}
 
 enum WebCryptoActions {
   DeriveBits = 'deriveBits',
   Encrypt = 'encrypt',
   Decrypt = 'decrypt',
   Sign = 'sign'
-};
+}
 
 type WebCryptoParams = {
   name: string,
@@ -39,36 +40,36 @@ type WebCryptoParams = {
  */
 export class SNWebCrypto implements SNPureCrypto {
 
-  private ready: Promise<any> | null
+  private ready: Promise<void> | null
 
   constructor() {
     /** Functions using Libsodium must await this
      * promise before performing any library functions */
-    this.ready = sodium.ready;
+    this.ready = sodium.ready
   }
 
-  deinit() {
-    this.ready = null;
+  deinit(): void {
+    this.ready = null
   }
 
-  public generateUUIDSync() {
-    return Utils.generateUUIDSync();
+  public generateUUIDSync(): string {
+    return Utils.generateUUIDSync()
   }
 
-  public async generateUUID() {
-    return Utils.generateUUIDSync();
+  public async generateUUID(): Promise<string> {
+    return Utils.generateUUIDSync()
   }
 
-  public timingSafeEqual(a: string, b: string) {
-    return timingSafeEqual(a, b);
+  public timingSafeEqual(a: string, b: string): boolean {
+    return timingSafeEqual(a, b)
   }
 
-  public async base64Encode(text: Utf8String) {
-    return Utils.base64Encode(text);
+  public async base64Encode(text: Utf8String): Promise<string> {
+    return Utils.base64Encode(text)
   }
 
-  public async base64Decode(base64String: Base64String) {
-    return Utils.base64Decode(base64String);
+  public async base64Decode(base64String: Base64String): Promise<string> {
+    return Utils.base64Decode(base64String)
   }
 
   public async pbkdf2(
@@ -76,24 +77,24 @@ export class SNWebCrypto implements SNPureCrypto {
     salt: Utf8String,
     iterations: number,
     length: number
-  ) {
-    const keyData = await Utils.stringToArrayBuffer(password);
+  ): Promise<HexString | null> {
+    const keyData = await Utils.stringToArrayBuffer(password)
     const key = await this.webCryptoImportKey(
       keyData,
       WebCryptoAlgs.Pbkdf2,
       [WebCryptoActions.DeriveBits]
-    );
+    )
     if (!key) {
-      console.error('Key is null, unable to continue');
-      return null;
+      console.error('Key is null, unable to continue')
+      return null
     }
-    return this.webCryptoDeriveBits(key, salt, iterations, length);
+    return this.webCryptoDeriveBits(key, salt, iterations, length)
   }
 
-  public async generateRandomKey(bits: number) {
-    const bytes = bits / 8;
-    const arrayBuffer = Utils.getGlobalScope().crypto.getRandomValues(new Uint8Array(bytes));
-    return Utils.arrayBufferToHexString(arrayBuffer);
+  public async generateRandomKey(bits: number): Promise<string> {
+    const bytes = bits / 8
+    const arrayBuffer = Utils.getGlobalScope().crypto.getRandomValues(new Uint8Array(bytes))
+    return Utils.arrayBufferToHexString(arrayBuffer)
   }
 
   public async aes256CbcEncrypt(
@@ -101,21 +102,21 @@ export class SNWebCrypto implements SNPureCrypto {
     iv: HexString,
     key: HexString
   ): Promise<Base64String> {
-    const keyData = await Utils.hexStringToArrayBuffer(key);
-    const ivData = await Utils.hexStringToArrayBuffer(iv);
-    const alg = { name: WebCryptoAlgs.AesCbc, iv: ivData };
+    const keyData = await Utils.hexStringToArrayBuffer(key)
+    const ivData = await Utils.hexStringToArrayBuffer(iv)
+    const alg = { name: WebCryptoAlgs.AesCbc, iv: ivData }
     const importedKeyData = await this.webCryptoImportKey(
       keyData,
       alg.name,
       [WebCryptoActions.Encrypt]
-    );
-    const textData = await Utils.stringToArrayBuffer(plaintext);
+    )
+    const textData = await Utils.stringToArrayBuffer(plaintext)
     const result = await crypto.subtle.encrypt(
       alg,
-      importedKeyData!,
+      importedKeyData,
       textData
-    );
-    return Utils.arrayBufferToBase64(result);
+    )
+    return Utils.arrayBufferToBase64(result)
   }
 
   public async aes256CbcDecrypt(
@@ -123,61 +124,68 @@ export class SNWebCrypto implements SNPureCrypto {
     iv: HexString,
     key: HexString
   ): Promise<Utf8String | null> {
-    const keyData = await Utils.hexStringToArrayBuffer(key);
-    const ivData = await Utils.hexStringToArrayBuffer(iv);
-    const alg = { name: WebCryptoAlgs.AesCbc, iv: ivData };
+    const keyData = await Utils.hexStringToArrayBuffer(key)
+    const ivData = await Utils.hexStringToArrayBuffer(iv)
+    const alg = { name: WebCryptoAlgs.AesCbc, iv: ivData }
     const importedKeyData = await this.webCryptoImportKey(
       keyData,
       alg.name,
       [WebCryptoActions.Decrypt]
-    );
-    const textData = await Utils.base64ToArrayBuffer(ciphertext);
-    return crypto.subtle.decrypt(
-      alg,
-      importedKeyData!,
-      textData
-    ).then(async (result: ArrayBuffer) => {
-      return Utils.arrayBufferToString(result);
-    }, (_) => {
-      return null;
-    });
+    )
+    const textData = await Utils.base64ToArrayBuffer(ciphertext)
+
+    try {
+      const result = await crypto.subtle.decrypt(
+        alg,
+        importedKeyData,
+        textData
+      )
+
+      return Utils.arrayBufferToString(result)
+    } catch {
+      return null
+    }
   }
 
   public async hmac256(
     message: Utf8String,
     key: HexString
   ): Promise<HexString | null> {
-    const keyHexData = await Utils.hexStringToArrayBuffer(key);
+    const keyHexData = await Utils.hexStringToArrayBuffer(key)
     const keyData = await this.webCryptoImportKey(
       keyHexData,
       WebCryptoAlgs.Hmac,
       [WebCryptoActions.Sign],
       { name: WebCryptoAlgs.Sha256 }
-    );
-    const messageData = await Utils.stringToArrayBuffer(message);
-    const funcParams = { name: WebCryptoAlgs.Hmac } as any;
-    return crypto.subtle.sign(
-      funcParams,
-      keyData!,
-      messageData
-    ).then((signature: ArrayBuffer) => {
-      return Utils.arrayBufferToHexString(signature);
-    }, (err: any) => {
-      console.error('Error computing HMAC:', err);
-      return null;
-    });
+    )
+    const messageData = await Utils.stringToArrayBuffer(message)
+    const funcParams = { name: WebCryptoAlgs.Hmac }
+
+    try {
+      const signature = await crypto.subtle.sign(
+        funcParams,
+        keyData,
+        messageData
+      )
+
+      return Utils.arrayBufferToHexString(signature)
+    } catch (error) {
+      console.error('Error computing HMAC:', error)
+
+      return null
+    }
   }
 
-  public async sha256(text: string) {
-    const textData = await Utils.stringToArrayBuffer(text);
-    const digest = await crypto.subtle.digest(WebCryptoAlgs.Sha256, textData);
-    return Utils.arrayBufferToHexString(digest);
+  public async sha256(text: string): Promise<string> {
+    const textData = await Utils.stringToArrayBuffer(text)
+    const digest = await crypto.subtle.digest(WebCryptoAlgs.Sha256, textData)
+    return Utils.arrayBufferToHexString(digest)
   }
 
-  public async unsafeSha1(text: string) {
-    const textData = await Utils.stringToArrayBuffer(text);
-    const digest = await crypto.subtle.digest(WebCryptoAlgs.Sha1, textData);
-    return Utils.arrayBufferToHexString(digest);
+  public async unsafeSha1(text: string): Promise<string> {
+    const textData = await Utils.stringToArrayBuffer(text)
+    const digest = await crypto.subtle.digest(WebCryptoAlgs.Sha1, textData)
+    return Utils.arrayBufferToHexString(digest)
   }
 
   /**
@@ -200,21 +208,17 @@ export class SNWebCrypto implements SNPureCrypto {
     alg: WebCryptoAlgs,
     actions: Array<WebCryptoActions>,
     hash?: WebCryptoParams
-  ) {
-    return subtleCrypto!.importKey(
+  ): Promise<CryptoKey> {
+    return subtleCrypto.importKey(
       'raw',
       keyData,
       {
         name: alg,
-        hash: hash!
+        hash: hash
       },
       false,
       actions
-    ).then((key) => {
-      return key;
-    }, (_) => {
-      return null;
-    });
+    )
   }
 
   /**
@@ -233,10 +237,11 @@ export class SNWebCrypto implements SNPureCrypto {
       salt: await Utils.stringToArrayBuffer(salt),
       iterations: iterations,
       hash: { name: WebCryptoAlgs.Sha512 },
-    };
-    return subtleCrypto!.deriveBits(params, key, length).then((bits) => {
-      return Utils.arrayBufferToHexString(new Uint8Array(bits));
-    });
+    }
+
+    return subtleCrypto.deriveBits(params, key, length).then((bits) => {
+      return Utils.arrayBufferToHexString(new Uint8Array(bits))
+    })
   }
 
   public async argon2(
@@ -246,7 +251,7 @@ export class SNWebCrypto implements SNPureCrypto {
     bytes: number,
     length: number
   ): Promise<HexString> {
-    await this.ready;
+    await this.ready
     const result = sodium.crypto_pwhash(
       length,
       await Utils.stringToArrayBuffer(password),
@@ -255,8 +260,8 @@ export class SNWebCrypto implements SNPureCrypto {
       bytes,
       sodium.crypto_pwhash_ALG_DEFAULT,
       'hex'
-    );
-    return result;
+    )
+    return result
   }
 
   public async xchacha20Encrypt(
@@ -265,9 +270,9 @@ export class SNWebCrypto implements SNPureCrypto {
     key: HexString,
     assocData: Utf8String
   ): Promise<Base64String> {
-    await this.ready;
+    await this.ready
     if (nonce.length !== 48) {
-      throw Error('Nonce must be 24 bytes');
+      throw Error('Nonce must be 24 bytes')
     }
     const arrayBuffer = sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
       plaintext,
@@ -275,8 +280,8 @@ export class SNWebCrypto implements SNPureCrypto {
       null,
       await Utils.hexStringToArrayBuffer(nonce),
       await Utils.hexStringToArrayBuffer(key)
-    );
-    return Utils.arrayBufferToBase64(arrayBuffer);
+    )
+    return Utils.arrayBufferToBase64(arrayBuffer)
   }
 
   public async xchacha20Decrypt(
@@ -285,9 +290,9 @@ export class SNWebCrypto implements SNPureCrypto {
     key: HexString,
     assocData: Utf8String | Uint8Array
   ): Promise<Utf8String | null> {
-    await this.ready;
+    await this.ready
     if (nonce.length !== 48) {
-      throw Error('Nonce must be 24 bytes');
+      throw Error('Nonce must be 24 bytes')
     }
     try {
       return sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
@@ -297,9 +302,9 @@ export class SNWebCrypto implements SNPureCrypto {
         await Utils.hexStringToArrayBuffer(nonce),
         await Utils.hexStringToArrayBuffer(key),
         'text'
-      );
+      )
     } catch {
-      return null;
+      return null
     }
   }
 }

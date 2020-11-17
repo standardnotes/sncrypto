@@ -14,7 +14,7 @@ Cryptographic primitives used by [SNJS](https://github.com/standardnotes/snjs).
 ## Building
 
 1. `npm install`
-2. `npm run start` or `npm run bundle`.
+2. `npm run build`.
 
 ## Tests
 
