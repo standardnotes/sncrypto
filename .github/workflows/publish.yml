@@ -17,6 +17,6 @@ jobs:
           node-version: 12
       - run: yarn install --frozen-lockfile
       - run: yarn build
-      - run: yarn publish
+      - run: yarn publish-packages
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
