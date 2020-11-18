@@ -1,6 +1,19 @@
 # SNCrypto
 
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
+
 Cryptographic primitives used by [SNJS](https://github.com/standardnotes/snjs).
+
+## Installing
+
+Depending on what package you want to type the following:
+```
+yarn add @standardnotes/sncrypto-common
+```
+or
+```
+yarn add @standardnotes/sncrypto-web
+```
 
 ## Supported Algorithms
 
@@ -13,8 +26,31 @@ Cryptographic primitives used by [SNJS](https://github.com/standardnotes/snjs).
 
 ## Building
 
-1. `npm install`
-2. `npm run build`.
+This repository is a Monorepo built with [Lerna](https://github.com/lerna/lerna). It consist of two packages: `@standardnotes/sncrypto-common` and `@standardnotes/sncrypto-web`.
+
+In order to build the project run
+```
+yarn install --frozen-lockfile
+yarn build
+```
+
+## Linting
+
+To run linter on all packages run
+```
+yarn lint
+```
+
+## Testing
+
+To run tests on all packages run
+```
+yarn test
+```
+
+## Publishing
+
+In order to publish a new version of the package please make sure you have updated the `version` property in `package.json` of the specific package you want to publish.
 
 ## Tests
 
