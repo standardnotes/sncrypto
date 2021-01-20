@@ -1,13 +1,13 @@
 {
   "name": "@standardnotes/sncrypto-web",
-  "version": "1.2.9",
+  "version": "1.2.10",
   "description": "SNCrypto Web",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "publishConfig": {
     "access": "public"
   },
