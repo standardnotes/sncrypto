@@ -2,6 +2,20 @@ export type HexString = string
 export type Utf8String = string
 export type Base64String = string
 
+export type Aes256GcmInput = {
+  plaintext: Utf8String,
+  iv: HexString,
+  key: HexString,
+  aad?: string,
+  encoding?: BufferEncoding,
+}
+export type Aes256GcmEncrypted = {
+  iv: HexString, 
+  tag: string, 
+  ciphertext: string,
+  encoding: BufferEncoding,
+}
+
 /**
  * Interface that clients have to implement to use snjs
  */
@@ -30,6 +44,40 @@ export interface SNPureCrypto {
   generateRandomKey(bits: number): Promise<string>
 
   /**
+   * Encrypts a string using AES-GCM.
+   * @param plaintext
+   * @param iv - In hex format
+   * @param key - In hex format
+   * @param aad
+   * @param inputEncoding -- 
+   * @returns Ciphertext in Base64 format.
+   */
+  aes256GcmEncrypt?({
+    input,
+    outputEncoding,
+  }: {
+    input: Aes256GcmInput,
+    outputEncoding: BufferEncoding,
+  }): Promise<Aes256GcmEncrypted>
+
+  /**
+   * // todo: update doc
+   * Decrypts a string using AES-GCM.
+   * @param ciphertext - Base64 format
+   * @param iv - In hex format
+   * @param key - In hex format
+   * @returns Plain utf8 string or null if decryption fails
+   */
+  aes256GcmDecrypt?({
+    encrypted,
+    key,
+  }: {
+    encrypted: Aes256GcmEncrypted,
+    key: HexString,
+  }): Promise<Utf8String | null>
+
+  /**
+   * @legacy
    * Encrypts a string using AES-CBC via WebCrypto.
    * @param plaintext
    * @param iv - In hex format
@@ -43,6 +91,7 @@ export interface SNPureCrypto {
   ): Promise<Base64String>
 
   /**
+   * @legacy
    * Decrypts a string using AES-CBC via WebCrypto.
    * @param ciphertext - Base64 format
    * @param iv - In hex format
