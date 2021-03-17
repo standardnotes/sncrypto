@@ -14,9 +14,15 @@
   "scripts": {
     "build": "webpack --mode production && tsc",
     "lint": "eslint . --ext .ts",
-    "test": "node test-server.js"
+    "test": "jest spec"
   },
   "dependencies": {
     "@standardnotes/sncrypto-common": "^1.2.10"
+  },
+  "jest": {
+    "preset": "./jest.json",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
   }
 }

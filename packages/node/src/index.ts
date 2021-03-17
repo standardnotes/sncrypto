@@ -1,1 +1,1 @@
-export { SNCryptoNode } from './crypto'
+export { SnCryptoNode } from './crypto'
