@@ -4,7 +4,6 @@ import {
   HexString,
   SnCryptoAes256Gcm,
   Unencrypted,
-  Utf8String,
 } from '@standardnotes/sncrypto-common'
 import { createCipheriv, createDecipheriv, randomBytes } from 'crypto'
 
@@ -35,7 +34,7 @@ export class SnCryptoNode implements SnCryptoAes256Gcm<BufferEncoding> {
   public async aes256GcmDecrypt(
     encrypted: Aes256GcmEncrypted<BufferEncoding>,
     key: HexString,
-  ): Promise<Utf8String | null> {
+  ): Promise<string> {
     const {iv, tag, ciphertext, encoding, aad} = encrypted
 
     const decipher = createDecipheriv(

@@ -46,10 +46,10 @@ export interface SnCryptoAes256Gcm<EncodingType> {
    * Decrypts a string using AES-GCM.
    * @param encrypted
    * @param key - encryption key as a hex string
-   * @returns A string encoded with encoding provided in the input or null if decryption fails
+   * @returns A string encoded with encoding provided in the input
    */
   aes256GcmDecrypt(
     encrypted: Aes256GcmEncrypted<EncodingType>,
     key: HexString,
-  ): Promise<string | null>
+  ): Promise<string>
 }
