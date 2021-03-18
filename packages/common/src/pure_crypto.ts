@@ -30,6 +30,7 @@ export interface SNPureCrypto {
   generateRandomKey(bits: number): Promise<string>
 
   /**
+   * @legacy
    * Encrypts a string using AES-CBC via WebCrypto.
    * @param plaintext
    * @param iv - In hex format
@@ -43,6 +44,7 @@ export interface SNPureCrypto {
   ): Promise<Base64String>
 
   /**
+   * @legacy
    * Decrypts a string using AES-CBC via WebCrypto.
    * @param ciphertext - Base64 format
    * @param iv - In hex format
