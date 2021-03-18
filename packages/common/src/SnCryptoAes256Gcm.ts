@@ -1,40 +1,55 @@
 import { HexString, Utf8String } from "."
 import { Base64String } from "./pure_crypto"
 
-export type Aes256GcmEncrypted = {
-  iv: HexString, 
-  tag: HexString, 
-  ciphertext: Base64String,
+/**
+ * Either a plaintext (UTF-8 string) or a `string` with an `encoding`.
+ */
+export type Unencrypted<EncodingType> = Utf8String | {string: string, encoding: EncodingType}
+
+/**
+ * @param unencrypted -- UTF-8 string or a `string` with `encoding`
+ * @param iv initialization vector as a hex string
+ * @param key encryption key as a hex string
+ * @param aad additional authenticated data as a hex string
+ */
+export type Aes256GcmInput<EncodingType> = {
+  unencrypted: Unencrypted<EncodingType>,
+  iv: HexString,
+  key: HexString,
+  aad?: HexString,
 }
 
-export interface SnCryptoAes256Gcm {
+/** 
+ * @param iv initialization vector as a hex string
+ * @param tag authentication tag as a hex string
+ * @param ciphertext as a base64 string
+ * @param encoding that will be applied after decrypting
+ * @param aad additional authenticated data as a hex string
+ */
+export type Aes256GcmEncrypted<EncodingType> = {
+  iv: HexString,
+  tag: HexString,
+  ciphertext: Base64String,
+  encoding: EncodingType,
+  aad: HexString,
+}
+
+export interface SnCryptoAes256Gcm<EncodingType> {
   /**
-   * // todo: update doc
    * Encrypts a string using AES-GCM.
-   * @param plaintext
-   * @param iv - In hex format
-   * @param key - In hex format
-   * @param aad
-   * @param inputEncoding -- 
-   * @returns Ciphertext in Base64 format.
+   * @param input
+   * @returns An object which can be run through aes256GcmDecrypt to retrieve the input text.
    */
-  aes256GcmEncrypt(
-    plaintext: Utf8String,
-    iv: HexString,
-    key: HexString,
-    aad?: HexString,
-  ): Promise<Aes256GcmEncrypted>
+  aes256GcmEncrypt(input: Aes256GcmInput<EncodingType>): Promise<Aes256GcmEncrypted<EncodingType>>
 
   /**
-   * // todo: update doc
    * Decrypts a string using AES-GCM.
-   * @param ciphertext - Base64 format
-   * @param iv - In hex format
-   * @param key - In hex format
-   * @returns Plain utf8 string or null if decryption fails
+   * @param encrypted
+   * @param key - encryption key as a hex string
+   * @returns A string encoded with encoding provided in the input or null if decryption fails
    */
   aes256GcmDecrypt(
-    encrypted: Aes256GcmEncrypted,
+    encrypted: Aes256GcmEncrypted<EncodingType>,
     key: HexString,
-  ): Promise<Utf8String | null>
+  ): Promise<string | null>
 }

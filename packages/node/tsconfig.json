@@ -11,12 +11,8 @@
     "outDir": "dist",
     "inlineSourceMap": true,
     "types": [
-      "node",
-      "jest"
-    ],
-    "typeRoots": [
-      "node_modules/@types",
-      "typings"
+      "jest",
+      "node"
     ]
   },
   "include": [

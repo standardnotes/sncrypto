@@ -6,11 +6,10 @@ describe('crypto operations', function () {
   it('aes gcm', async function () {
     const iv = await crypto.generateRandomKey(128)
     const key = await crypto.generateRandomKey(256)
-    const plaintextUtf8 = 'hello world 🌍'
-    const plaintext = Buffer.from(plaintextUtf8, 'utf-8').toString('hex')
-    const encrypted = await crypto.aes256GcmEncrypt(plaintext, iv, key)
+    const unencrypted = 'hello world 🌍'
+    const encrypted = await crypto.aes256GcmEncrypt({unencrypted, iv, key})
     const decrypted = await crypto.aes256GcmDecrypt(encrypted, key)
-    expect(decrypted).toEqual(plaintextUtf8)
+    expect(decrypted).toEqual(unencrypted)
   })
 
   // from https://github.com/xorbit/node-aes-gcm/blob/588f9066a217335acc56ab45559d2b46edc9fa83/test/test.js#L342
@@ -19,7 +18,7 @@ describe('crypto operations', function () {
       'feffe9928665731c6d6a8f9467308308' +
       'feffe9928665731c6d6a8f9467308308'
     const iv = 'cafebabefacedbaddecaf888'
-    const plaintext = 
+    const string = 
       'd9313225f88406e5a55909c5aff5269a' +
       '86a7a9531534f7da2e4c303d8a318a72' +
       '1c3c0c95956809532fcf0e2449a6b525' +
@@ -32,20 +31,26 @@ describe('crypto operations', function () {
       'c5f61e6393ba7a0abcc9f662898015ad', 
       'hex',
     ).toString('base64')
-    const auth_tag = 'b094dac5d93471bdec1a502270e3cc6c'
+    const desiredTag = 'b094dac5d93471bdec1a502270e3cc6c'
 
-    const result = await crypto.aes256GcmEncrypt(
-      plaintext,
+    const encrypted = await crypto.aes256GcmEncrypt({
+      unencrypted: { string, encoding: 'hex' },
       iv,
       key,
       aad,
-    )
+    })
 
-    expect(result.ciphertext).toEqual(desiredCiphertext)
+    expect(encrypted.ciphertext).toEqual(desiredCiphertext)
+    expect(encrypted.tag).toEqual(desiredTag)
+    expect(encrypted.iv).toEqual(iv)
+
+    const decrypted = await crypto.aes256GcmDecrypt(encrypted, key)
+
+    expect(decrypted).toEqual(string)
   })
 
   // from https://github.com/standardnotes/auth/blob/d5585b3ad0a27f58fb413ff2d85699d82b2e9b65/src/Domain/Encryption/Crypter.spec.ts#L32
-  it('should encrypt data with an expected output', async () => {
+  it('should encrypt and decrypt data with an expected output', async () => {
     const keys = [
       '00000000000000000000000000000000' +
         '00000000000000000000000000000000',
@@ -137,22 +142,28 @@ describe('crypto operations', function () {
     ]
 
     for (let i = 0; i < keys.length; i++) {
-      const plaintext = inputs[i]
+      const string = inputs[i]
       const aad = aads[i]
       const iv = ivs[i]
       const key = keys[i]
 
-      // const tag = tags[i]
+      const desiredTag = tags[i]
       const desiredCiphertext = Buffer.from(outputs[i], 'hex').toString('base64')
 
-      const result = await crypto.aes256GcmEncrypt(
-        plaintext,
+      const encrypted = await crypto.aes256GcmEncrypt({
+        unencrypted: { string, encoding: 'hex' },
         iv,
         key,
         aad,
-      )
+      })
 
-      expect(result.ciphertext).toEqual(desiredCiphertext)
+      expect(encrypted.ciphertext).toEqual(desiredCiphertext)
+      expect(encrypted.tag).toEqual(desiredTag)
+      expect(encrypted.iv).toEqual(iv)
+
+      const decrypted = await crypto.aes256GcmDecrypt(encrypted, key)
+
+      expect(decrypted).toEqual(string)
     }
   })
 })
