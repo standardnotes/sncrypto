@@ -119,9 +119,9 @@ describe('crypto operations', async function () {
 
   it('hmac 1', async function () {
     const text = 'hello world 🌍';
-    const key = 'e802dc953f3f1f7b5db62409b74ac848559d4711c4e0047ecc5e312ad8ab8397';
+    const key = '73756d6d657274696d65';
     const hash = await webCrypto.hmac1(text, key);
-    const expected = 'b63f94ee33a067ffac3ee97c7987dd3171dcdc747a322bb3f3ab890201c8e6f9';
+    const expected = '534bc6ff40d4616e9be4fb530093d5f7f87173fa';
     expect(hash).to.equal(expected);
   });
 
