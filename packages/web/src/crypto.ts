@@ -182,6 +182,35 @@ export class SNWebCrypto implements SNPureCrypto {
     return Utils.arrayBufferToHexString(digest)
   }
 
+  public async hmac1(
+    message: Utf8String,
+    key: HexString
+  ): Promise<HexString | null> {
+    const keyHexData = await Utils.hexStringToArrayBuffer(key)
+    const keyData = await this.webCryptoImportKey(
+      keyHexData,
+      WebCryptoAlgs.Hmac,
+      [WebCryptoActions.Sign],
+      { name: WebCryptoAlgs.Sha1 }
+    )
+    const messageData = await Utils.stringToArrayBuffer(message)
+    const funcParams = { name: WebCryptoAlgs.Hmac }
+
+    try {
+      const signature = await crypto.subtle.sign(
+        funcParams,
+        keyData,
+        messageData
+      )
+
+      return Utils.arrayBufferToHexString(signature)
+    } catch (error) {
+      console.error('Error computing HMAC:', error)
+
+      return null
+    }
+  }
+
   public async unsafeSha1(text: string): Promise<string> {
     const textData = await Utils.stringToArrayBuffer(text)
     const digest = await crypto.subtle.digest(WebCryptoAlgs.Sha1, textData)

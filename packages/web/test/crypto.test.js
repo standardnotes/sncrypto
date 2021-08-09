@@ -117,6 +117,14 @@ describe('crypto operations', async function () {
     expect(hash).to.equal(expected);
   });
 
+  it('hmac 1', async function () {
+    const text = 'hello world 🌍';
+    const key = '73756d6d657274696d65';
+    const hash = await webCrypto.hmac1(text, key);
+    const expected = '534bc6ff40d4616e9be4fb530093d5f7f87173fa';
+    expect(hash).to.equal(expected);
+  });
+
   it('sha1', async function () {
     const text = 'hello world 🌍';
     const hash = await webCrypto.unsafeSha1(text);

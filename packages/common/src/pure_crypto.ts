@@ -74,6 +74,17 @@ export interface SNPureCrypto {
    */
   sha256(text: string): Promise<string>
 
+ /**
+   * Runs HMAC with SHA-1 on a message with key.
+   * @param message - Plain utf8 string
+   * @param key - In hex format
+   * @returns Hex string or null if computation fails
+   */
+  hmac1(
+    message: Utf8String,
+    key: HexString
+  ): Promise<HexString | null>;
+
   /**
    * Use only for legacy applications.
    * @param text - Plain utf8 string
