@@ -1,6 +1,6 @@
 {
   "name": "@standardnotes/sncrypto-node",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "SNCrypto for Node.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
