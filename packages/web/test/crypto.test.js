@@ -323,7 +323,7 @@ describe('crypto operations', async function () {
       '287922',
       '162583',
       '399871',
-      '520489',
+      '520489'
     ]
 
     for (let counter = 0; counter < hotpTest.length; counter++) {
@@ -345,7 +345,7 @@ describe('crypto operations', async function () {
       { time: 1111111109000, totp: '07081804' },
       { time: 1111111111000, totp: '14050471' },
       { time: 1234567890000, totp: '89005924' },
-      { time: 2000000000000, totp: '69279037' },
+      { time: 2000000000000, totp: '69279037' }
     ]
 
     for (let { time, totp } of totpTest) {

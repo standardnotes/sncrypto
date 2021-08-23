@@ -82,7 +82,7 @@ describe('utils', async function () {
     { text: 'foo', base32: 'MZXW6===' },
     { text: 'foob', base32: 'MZXW6YQ=' },
     { text: 'fooba', base32: 'MZXW6YTB' },
-    { text: 'foobar', base32: 'MZXW6YTBOI======' },
+    { text: 'foobar', base32: 'MZXW6YTBOI======' }
   ]
 
   it('base32Encode', async function () {

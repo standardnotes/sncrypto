@@ -7,7 +7,7 @@ import {
   ready,
   to_base64,
   to_hex,
-  to_string,
+  to_string
 } from './libsodium'
 
 const SN_BASE64_VARIANT = base64_variants.ORIGINAL
