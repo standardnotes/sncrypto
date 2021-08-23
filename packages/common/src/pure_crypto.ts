@@ -6,7 +6,6 @@ export type Base64String = string
  * Interface that clients have to implement to use snjs
  */
 export interface SNPureCrypto {
-
   /**
    * Derives a key from a password and salt using PBKDF2 via WebCrypto.
    * @param password - utf8 string
@@ -63,10 +62,7 @@ export interface SNPureCrypto {
    * @param key - In hex format
    * @returns Hex string or null if computation fails
    */
-  hmac256(
-    message: Utf8String,
-    key: HexString
-  ): Promise<HexString | null>
+  hmac256(message: Utf8String, key: HexString): Promise<HexString | null>
 
   /**
    * @param text - Plain utf8 string
@@ -74,16 +70,13 @@ export interface SNPureCrypto {
    */
   sha256(text: string): Promise<string>
 
- /**
+  /**
    * Runs HMAC with SHA-1 on a message with key.
    * @param message - Plain utf8 string
    * @param key - In hex format
    * @returns Hex string or null if computation fails
    */
-  hmac1(
-    message: Utf8String,
-    key: HexString
-  ): Promise<HexString | null>;
+  hmac1(message: Utf8String, key: HexString): Promise<HexString | null>
 
   /**
    * Use only for legacy applications.
@@ -173,4 +166,44 @@ export interface SNPureCrypto {
    * @param b
    */
   timingSafeEqual(a: string, b: string): boolean
+
+  /**
+   * Generates a random secret for TOTP authentication
+   *
+   * RFC4226 reccomends a length of at least 160 bits = 32 b32 chars
+   * https://datatracker.ietf.org/doc/html/rfc4226#section-4
+   */
+  generateOtpSecret(): Promise<string>
+
+  /**
+   * Generates a HOTP code as per RFC4226 specification
+   * using HMAC-SHA1
+   * https://datatracker.ietf.org/doc/html/rfc4226
+   *
+   * @param secret OTP shared secret
+   * @param counter HOTP counter
+   * @returns HOTP auth code
+   */
+  hotpToken(
+    secret: string,
+    counter: number,
+    tokenLength: number
+  ): Promise<string>
+
+  /**
+   * Generates a TOTP code as per RFC6238 specification
+   * using HMAC-SHA1
+   * https://datatracker.ietf.org/doc/html/rfc6238
+   *
+   * @param secret OTP shared secret
+   * @param timestamp time specified in milliseconds since UNIX epoch
+   * @param step time step specified in seconds
+   * @returns TOTP auth code
+   */
+  totpToken(
+    secret: string,
+    timestamp: number,
+    tokenLength: number,
+    step: number
+  ): Promise<string>
 }
