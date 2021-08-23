@@ -6,7 +6,7 @@ import {
   HexString,
   SNPureCrypto,
   Utf8String,
-  timingSafeEqual
+  timingSafeEqual,
 } from '@standardnotes/sncrypto-common'
 
 const subtleCrypto = Utils.getSubtleCrypto()
@@ -17,18 +17,18 @@ enum WebCryptoAlgs {
   Sha256 = 'SHA-256',
   Pbkdf2 = 'PBKDF2',
   Sha1 = 'SHA-1',
-  Hmac = 'HMAC'
+  Hmac = 'HMAC',
 }
 
 enum WebCryptoActions {
   DeriveBits = 'deriveBits',
   Encrypt = 'encrypt',
   Decrypt = 'decrypt',
-  Sign = 'sign'
+  Sign = 'sign',
 }
 
 type WebCryptoParams = {
-  name: string,
+  name: string
   hash?: string
 }
 
@@ -39,7 +39,6 @@ type WebCryptoParams = {
  * — Libsodium.js library integration
  */
 export class SNWebCrypto implements SNPureCrypto {
-
   private ready: Promise<void> | null
 
   constructor() {
@@ -79,11 +78,9 @@ export class SNWebCrypto implements SNPureCrypto {
     length: number
   ): Promise<HexString | null> {
     const keyData = await Utils.stringToArrayBuffer(password)
-    const key = await this.webCryptoImportKey(
-      keyData,
-      WebCryptoAlgs.Pbkdf2,
-      [WebCryptoActions.DeriveBits]
-    )
+    const key = await this.webCryptoImportKey(keyData, WebCryptoAlgs.Pbkdf2, [
+      WebCryptoActions.DeriveBits,
+    ])
     if (!key) {
       console.error('Key is null, unable to continue')
       return null
@@ -93,7 +90,9 @@ export class SNWebCrypto implements SNPureCrypto {
 
   public async generateRandomKey(bits: number): Promise<string> {
     const bytes = bits / 8
-    const arrayBuffer = Utils.getGlobalScope().crypto.getRandomValues(new Uint8Array(bytes))
+    const arrayBuffer = Utils.getGlobalScope().crypto.getRandomValues(
+      new Uint8Array(bytes)
+    )
     return Utils.arrayBufferToHexString(arrayBuffer)
   }
 
@@ -105,17 +104,11 @@ export class SNWebCrypto implements SNPureCrypto {
     const keyData = await Utils.hexStringToArrayBuffer(key)
     const ivData = await Utils.hexStringToArrayBuffer(iv)
     const alg = { name: WebCryptoAlgs.AesCbc, iv: ivData }
-    const importedKeyData = await this.webCryptoImportKey(
-      keyData,
-      alg.name,
-      [WebCryptoActions.Encrypt]
-    )
+    const importedKeyData = await this.webCryptoImportKey(keyData, alg.name, [
+      WebCryptoActions.Encrypt,
+    ])
     const textData = await Utils.stringToArrayBuffer(plaintext)
-    const result = await crypto.subtle.encrypt(
-      alg,
-      importedKeyData,
-      textData
-    )
+    const result = await crypto.subtle.encrypt(alg, importedKeyData, textData)
     return Utils.arrayBufferToBase64(result)
   }
 
@@ -127,19 +120,13 @@ export class SNWebCrypto implements SNPureCrypto {
     const keyData = await Utils.hexStringToArrayBuffer(key)
     const ivData = await Utils.hexStringToArrayBuffer(iv)
     const alg = { name: WebCryptoAlgs.AesCbc, iv: ivData }
-    const importedKeyData = await this.webCryptoImportKey(
-      keyData,
-      alg.name,
-      [WebCryptoActions.Decrypt]
-    )
+    const importedKeyData = await this.webCryptoImportKey(keyData, alg.name, [
+      WebCryptoActions.Decrypt,
+    ])
     const textData = await Utils.base64ToArrayBuffer(ciphertext)
 
     try {
-      const result = await crypto.subtle.decrypt(
-        alg,
-        importedKeyData,
-        textData
-      )
+      const result = await crypto.subtle.decrypt(alg, importedKeyData, textData)
 
       return Utils.arrayBufferToString(result)
     } catch {
@@ -243,7 +230,7 @@ export class SNWebCrypto implements SNPureCrypto {
       keyData,
       {
         name: alg,
-        hash: hash
+        hash: hash,
       },
       false,
       actions
@@ -335,5 +322,76 @@ export class SNWebCrypto implements SNPureCrypto {
     } catch {
       return null
     }
+  }
+
+  /**
+   * Generates a random secret for TOTP authentication
+   *
+   * RFC4226 reccomends a length of at least 160 bits = 32 b32 chars
+   * https://datatracker.ietf.org/doc/html/rfc4226#section-4
+   */
+  public async generateOtpSecret(): Promise<string> {
+    const bits = 160
+    const bytes = bits / 8
+    const secretBytes = Utils.getGlobalScope().crypto.getRandomValues(
+      new Uint8Array(bytes)
+    )
+    const secret = Utils.base32Encode(secretBytes)
+    return secret
+  }
+
+  /**
+   * Generates a HOTP code as per RFC4226 specification
+   * using HMAC-SHA1
+   * https://datatracker.ietf.org/doc/html/rfc4226
+   *
+   * @param secret OTP shared secret
+   * @param counter HOTP counter
+   * @returns HOTP auth code
+   */
+  public async hotpToken(
+    secret: string,
+    counter: number,
+    tokenLength: number = 6
+  ): Promise<string> {
+    const encoder = new TextEncoder()
+    const bytes = encoder.encode(secret)
+
+    const key = await Utils.getSubtleCrypto().importKey(
+      'raw',
+      bytes,
+      { name: 'HMAC', hash: { name: 'SHA-1' } },
+      false,
+      ['sign']
+    )
+    const counterArray = Utils.padStart(counter)
+    const hs = await Utils.getSubtleCrypto().sign('HMAC', key, counterArray)
+    const sNum = Utils.truncateOTP(hs)
+    const padded = ('0'.repeat(tokenLength) + (sNum % 10 ** tokenLength)).slice(
+      -tokenLength
+    )
+
+    return padded
+  }
+
+  /**
+   * Generates a TOTP code as per RFC6238 specification
+   * using HMAC-SHA1
+   * https://datatracker.ietf.org/doc/html/rfc6238
+   *
+   * @param secret OTP shared secret
+   * @param timestamp time specified in milliseconds since UNIX epoch
+   * @param step time step specified in seconds
+   * @returns TOTP auth code
+   */
+  public async totpToken(
+    secret: string,
+    timestamp: number,
+    tokenLength: number = 6,
+    step: number = 30
+  ): Promise<string> {
+    const time = Math.floor(timestamp / step / 1000.0)
+    const token = await this.hotpToken(secret, time, tokenLength)
+    return token
   }
 }

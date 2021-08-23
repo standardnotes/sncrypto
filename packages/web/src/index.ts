@@ -10,5 +10,7 @@ export {
   hexStringToArrayBuffer,
   hexToBase64,
   isWebCryptoAvailable,
-  stringToArrayBuffer
+  stringToArrayBuffer,
+  base32Decode,
+  base32Encode,
 } from './utils'

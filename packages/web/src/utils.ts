@@ -7,7 +7,7 @@ import {
   ready,
   to_base64,
   to_hex,
-  to_string
+  to_string,
 } from './libsodium'
 
 const SN_BASE64_VARIANT = base64_variants.ORIGINAL
@@ -19,7 +19,7 @@ const SN_BASE64_VARIANT = base64_variants.ORIGINAL
 
 declare global {
   interface Document {
-    documentMode?: string;
+    documentMode?: string
   }
   interface Window {
     msCrypto?: Crypto
@@ -38,7 +38,10 @@ export function getGlobalScope(): Window & typeof globalThis {
  * @access public
  */
 export function ieOrEdge(): boolean {
-  return (typeof document !== 'undefined' && !!document.documentMode) || /Edge/.test(navigator.userAgent)
+  return (
+    (typeof document !== 'undefined' && !!document.documentMode) ||
+    /Edge/.test(navigator.userAgent)
+  )
 }
 
 /**
@@ -46,7 +49,9 @@ export function ieOrEdge(): boolean {
  * @access public
  */
 export function isWebCryptoAvailable(): boolean {
-  return !ieOrEdge() && getGlobalScope().crypto && !!getGlobalScope().crypto.subtle
+  return (
+    !ieOrEdge() && getGlobalScope().crypto && !!getGlobalScope().crypto.subtle
+  )
 }
 
 /**
@@ -72,22 +77,31 @@ export function generateUUIDSync(): string {
     const buf = new Uint32Array(4)
     crypto.getRandomValues(buf)
     let idx = -1
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      idx++
-      const r = (buf[idx >> 3] >> ((idx % 8) * 4)) & 15
-      const v = c === 'x' ? r : (r & 0x3 | 0x8)
-      return v.toString(16)
-    })
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      function (c) {
+        idx++
+        const r = (buf[idx >> 3] >> ((idx % 8) * 4)) & 15
+        const v = c === 'x' ? r : (r & 0x3) | 0x8
+        return v.toString(16)
+      }
+    )
   } else {
     let d = new Date().getTime()
-    if (globalScope.performance && typeof globalScope.performance.now === "function") {
+    if (
+      globalScope.performance &&
+      typeof globalScope.performance.now === 'function'
+    ) {
       d += performance.now() // use high-precision timer if available
     }
-    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      const r = (d + Math.random() * 16) % 16 | 0
-      d = Math.floor(d / 16)
-      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
-    })
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      function (c) {
+        const r = (d + Math.random() * 16) % 16 | 0
+        d = Math.floor(d / 16)
+        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
+      }
+    )
     return uuid
   }
 }
@@ -105,7 +119,9 @@ export async function stringToArrayBuffer(string: string): Promise<Uint8Array> {
  * Converts an ArrayBuffer into a plain string
  * @param {ArrayBuffer} arrayBuffer
  */
-export async function arrayBufferToString(arrayBuffer: ArrayBuffer): Promise<string> {
+export async function arrayBufferToString(
+  arrayBuffer: ArrayBuffer
+): Promise<string> {
   await ready
   return to_string(arrayBuffer as Uint8Array)
 }
@@ -114,7 +130,9 @@ export async function arrayBufferToString(arrayBuffer: ArrayBuffer): Promise<str
  * Converts an ArrayBuffer into a hex string
  * @param arrayBuffer
  */
-export async function arrayBufferToHexString(arrayBuffer: ArrayBuffer): Promise<string> {
+export async function arrayBufferToHexString(
+  arrayBuffer: ArrayBuffer
+): Promise<string> {
   await ready
   return to_hex(Buffer.from(arrayBuffer))
 }
@@ -142,7 +160,9 @@ export async function base64ToArrayBuffer(base64: string): Promise<Uint8Array> {
  * Converts an ArrayBuffer into a base64 string
  * @param buffer
  */
-export async function arrayBufferToBase64(arrayBuffer: ArrayBuffer): Promise<string> {
+export async function arrayBufferToBase64(
+  arrayBuffer: ArrayBuffer
+): Promise<string> {
   await ready
   return to_base64(Buffer.from(arrayBuffer), SN_BASE64_VARIANT)
 }
@@ -183,4 +203,104 @@ export async function base64Encode(text: string): Promise<string> {
 export async function base64Decode(base64String: string): Promise<string> {
   await ready
   return to_string(from_base64(base64String, SN_BASE64_VARIANT))
+}
+
+const RFC4648 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
+
+export function base32Encode(input: ArrayBuffer): string {
+  const length = input.byteLength
+  const buffer = new Uint8Array(input)
+
+  let bitIdx = 0
+  let currentVal = 0
+  let output = ''
+
+  for (let i = 0; i < length; i++) {
+    currentVal = (currentVal << 8) | buffer[i]
+    bitIdx += 8
+
+    while (bitIdx >= 5) {
+      output += RFC4648[(currentVal >>> (bitIdx - 5)) & 31]
+      bitIdx -= 5
+    }
+  }
+
+  if (bitIdx > 0) {
+    output += RFC4648[(currentVal << (5 - bitIdx)) & 31]
+  }
+
+  while (output.length % 8 > 0) {
+    output += '='
+  }
+
+  return output
+}
+
+export function base32Decode(b32Input: string): ArrayBuffer {
+  const input = b32Input.toUpperCase().replace(/=+$/, '')
+
+  for (let i = 0; i < input.length; i++) {
+    if (!RFC4648.includes(input[i]))
+      throw new Error(`Invalid RFC4648 char ${input[i]} at index ${i}`)
+  }
+
+  const output = new Uint8Array(((input.length * 5) / 8) | 0)
+
+  let outIdx = 0
+  let bitIdx = 0
+  let currentVal = 0
+
+  for (let i = 0; i < input.length; i++) {
+    currentVal = (currentVal << 5) | RFC4648.indexOf(input[i])
+    bitIdx += 5
+
+    if (bitIdx >= 8) {
+      output[outIdx++] = (currentVal >>> (bitIdx - 8)) & 255
+      bitIdx -= 8
+    }
+  }
+
+  return output.buffer
+}
+
+/**
+ * Truncate HMAC-SHA1 calculated value for HOTP code generation
+ */
+export function truncateOTP(hsBuffer: ArrayBuffer) {
+  const hs = new Uint8Array(hsBuffer)
+  // First we take the last byte of our generated HS and extract last 4 bits out of it.
+  // This will be our _offset_, a number between 0 and 15.
+  const offset = hs[19] & 0b1111
+
+  // Next we take 4 bytes out of the HS, starting at the offset
+  const P =
+    ((hs[offset] & 0x7f) << 24) |
+    (hs[offset + 1] << 16) |
+    (hs[offset + 2] << 8) |
+    hs[offset + 3]
+
+  // Finally, convert it into a binary string representation
+  const pString = P.toString(2)
+
+  const Snum = parseInt(pString, 2)
+
+  return Snum
+}
+
+/**
+ * Pad HOTP counter with leading zeros producing an 8 byte array
+ */
+export function padStart(counter: number) {
+  const buffer = new ArrayBuffer(8)
+  const bView = new DataView(buffer)
+
+  const byteString = '0'.repeat(64) // 8 bytes
+  const bCounter = (byteString + counter.toString(2)).slice(-64)
+
+  for (let byte = 0; byte < 64; byte += 8) {
+    const byteValue = parseInt(bCounter.slice(byte, byte + 8), 2)
+    bView.setUint8(byte / 8, byteValue)
+  }
+
+  return buffer
 }
