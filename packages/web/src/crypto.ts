@@ -6,7 +6,7 @@ import {
   HexString,
   SNPureCrypto,
   Utf8String,
-  timingSafeEqual,
+  timingSafeEqual
 } from '@standardnotes/sncrypto-common'
 
 const subtleCrypto = Utils.getSubtleCrypto()
@@ -17,14 +17,14 @@ enum WebCryptoAlgs {
   Sha256 = 'SHA-256',
   Pbkdf2 = 'PBKDF2',
   Sha1 = 'SHA-1',
-  Hmac = 'HMAC',
+  Hmac = 'HMAC'
 }
 
 enum WebCryptoActions {
   DeriveBits = 'deriveBits',
   Encrypt = 'encrypt',
   Decrypt = 'decrypt',
-  Sign = 'sign',
+  Sign = 'sign'
 }
 
 type WebCryptoParams = {
@@ -79,7 +79,7 @@ export class SNWebCrypto implements SNPureCrypto {
   ): Promise<HexString | null> {
     const keyData = await Utils.stringToArrayBuffer(password)
     const key = await this.webCryptoImportKey(keyData, WebCryptoAlgs.Pbkdf2, [
-      WebCryptoActions.DeriveBits,
+      WebCryptoActions.DeriveBits
     ])
     if (!key) {
       console.error('Key is null, unable to continue')
@@ -105,7 +105,7 @@ export class SNWebCrypto implements SNPureCrypto {
     const ivData = await Utils.hexStringToArrayBuffer(iv)
     const alg = { name: WebCryptoAlgs.AesCbc, iv: ivData }
     const importedKeyData = await this.webCryptoImportKey(keyData, alg.name, [
-      WebCryptoActions.Encrypt,
+      WebCryptoActions.Encrypt
     ])
     const textData = await Utils.stringToArrayBuffer(plaintext)
     const result = await crypto.subtle.encrypt(alg, importedKeyData, textData)
@@ -121,7 +121,7 @@ export class SNWebCrypto implements SNPureCrypto {
     const ivData = await Utils.hexStringToArrayBuffer(iv)
     const alg = { name: WebCryptoAlgs.AesCbc, iv: ivData }
     const importedKeyData = await this.webCryptoImportKey(keyData, alg.name, [
-      WebCryptoActions.Decrypt,
+      WebCryptoActions.Decrypt
     ])
     const textData = await Utils.base64ToArrayBuffer(ciphertext)
 
@@ -230,7 +230,7 @@ export class SNWebCrypto implements SNPureCrypto {
       keyData,
       {
         name: alg,
-        hash: hash,
+        hash: hash
       },
       false,
       actions
@@ -252,7 +252,7 @@ export class SNWebCrypto implements SNPureCrypto {
       name: WebCryptoAlgs.Pbkdf2,
       salt: await Utils.stringToArrayBuffer(salt),
       iterations: iterations,
-      hash: { name: WebCryptoAlgs.Sha512 },
+      hash: { name: WebCryptoAlgs.Sha512 }
     }
 
     return subtleCrypto.deriveBits(params, key, length).then((bits) => {
