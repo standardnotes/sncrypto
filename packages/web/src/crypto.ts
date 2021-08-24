@@ -364,13 +364,13 @@ export class SNWebCrypto implements SNPureCrypto {
   public async hotpToken(
     secret: string,
     counter: number,
-    tokenLength: number = 6
+    tokenLength = 6
   ): Promise<string> {
     const encoder = new TextEncoder()
     const bytes = encoder.encode(secret)
 
     const key = await this.webCryptoImportKey(bytes, WebCryptoAlgs.Hmac, 
-      [WebCryptoActions.Sign], {name:WebCryptoAlgs.Sha1});
+      [WebCryptoActions.Sign], {name:WebCryptoAlgs.Sha1})
 
     const counterArray = Utils.padStart(counter)
     const hs = await Utils.getSubtleCrypto().sign('HMAC', key, counterArray)
@@ -395,8 +395,8 @@ export class SNWebCrypto implements SNPureCrypto {
   public async totpToken(
     secret: string,
     timestamp: number,
-    tokenLength: number = 6,
-    step: number = 30
+    tokenLength = 6,
+    step = 30
   ): Promise<string> {
     const time = Math.floor(timestamp / step / 1000.0)
     const token = await this.hotpToken(secret, time, tokenLength)
