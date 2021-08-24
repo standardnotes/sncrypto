@@ -246,7 +246,7 @@ export function base32Decode(b32Input: string): ArrayBuffer {
 /**
  * Truncate HMAC-SHA1 calculated value for HOTP code generation
  */
-export function truncateOTP(hsBuffer: ArrayBuffer) {
+export function truncateOTP(hsBuffer: ArrayBuffer):number {
   const hs = new Uint8Array(hsBuffer)
   // First we take the last byte of our generated HS and extract last 4 bits out of it.
   // This will be our _offset_, a number between 0 and 15.
@@ -270,7 +270,7 @@ export function truncateOTP(hsBuffer: ArrayBuffer) {
 /**
  * Pad HOTP counter with leading zeros producing an 8 byte array
  */
-export function padStart(counter: number) {
+export function padStart(counter: number):ArrayBuffer {
   const buffer = new ArrayBuffer(8)
   const bView = new DataView(buffer)
 
