@@ -19,7 +19,7 @@ const SN_BASE64_VARIANT = base64_variants.ORIGINAL
 
 declare global {
   interface Document {
-    documentMode?: string;
+    documentMode?: string
   }
   interface Window {
     msCrypto?: Crypto
@@ -183,4 +183,104 @@ export async function base64Encode(text: string): Promise<string> {
 export async function base64Decode(base64String: string): Promise<string> {
   await ready
   return to_string(from_base64(base64String, SN_BASE64_VARIANT))
+}
+
+const RFC4648 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
+
+export function base32Encode(input: ArrayBuffer): string {
+  const length = input.byteLength
+  const buffer = new Uint8Array(input)
+
+  let bitIdx = 0
+  let currentVal = 0
+  let output = ''
+
+  for (let i = 0; i < length; i++) {
+    currentVal = (currentVal << 8) | buffer[i]
+    bitIdx += 8
+
+    while (bitIdx >= 5) {
+      output += RFC4648[(currentVal >>> (bitIdx - 5)) & 31]
+      bitIdx -= 5
+    }
+  }
+
+  if (bitIdx > 0) {
+    output += RFC4648[(currentVal << (5 - bitIdx)) & 31]
+  }
+
+  while (output.length % 8 > 0) {
+    output += '='
+  }
+
+  return output
+}
+
+export function base32Decode(b32Input: string): ArrayBuffer {
+  const input = b32Input.toUpperCase().replace(/=+$/, '')
+
+  for (let i = 0; i < input.length; i++) {
+    if (!RFC4648.includes(input[i]))
+      throw new Error(`Invalid RFC4648 char ${input[i]} at index ${i}`)
+  }
+
+  const output = new Uint8Array(((input.length * 5) / 8) | 0)
+
+  let outIdx = 0
+  let bitIdx = 0
+  let currentVal = 0
+
+  for (let i = 0; i < input.length; i++) {
+    currentVal = (currentVal << 5) | RFC4648.indexOf(input[i])
+    bitIdx += 5
+
+    if (bitIdx >= 8) {
+      output[outIdx++] = (currentVal >>> (bitIdx - 8)) & 255
+      bitIdx -= 8
+    }
+  }
+
+  return output.buffer
+}
+
+/**
+ * Truncate HMAC-SHA1 calculated value for HOTP code generation
+ */
+export function truncateOTP(hsBuffer: ArrayBuffer) {
+  const hs = new Uint8Array(hsBuffer)
+  // First we take the last byte of our generated HS and extract last 4 bits out of it.
+  // This will be our _offset_, a number between 0 and 15.
+  const offset = hs[19] & 0b1111
+
+  // Next we take 4 bytes out of the HS, starting at the offset
+  const P =
+    ((hs[offset] & 0x7f) << 24) |
+    (hs[offset + 1] << 16) |
+    (hs[offset + 2] << 8) |
+    hs[offset + 3]
+
+  // Finally, convert it into a binary string representation
+  const pString = P.toString(2)
+
+  const Snum = parseInt(pString, 2)
+
+  return Snum
+}
+
+/**
+ * Pad HOTP counter with leading zeros producing an 8 byte array
+ */
+export function padStart(counter: number) {
+  const buffer = new ArrayBuffer(8)
+  const bView = new DataView(buffer)
+
+  const byteString = '0'.repeat(64) // 8 bytes
+  const bCounter = (byteString + counter.toString(2)).slice(-64)
+
+  for (let byte = 0; byte < 64; byte += 8) {
+    const byteValue = parseInt(bCounter.slice(byte, byte + 8), 2)
+    bView.setUint8(byte / 8, byteValue)
+  }
+
+  return buffer
 }

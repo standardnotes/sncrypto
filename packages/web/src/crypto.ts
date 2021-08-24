@@ -28,7 +28,7 @@ enum WebCryptoActions {
 }
 
 type WebCryptoParams = {
-  name: string,
+  name: string
   hash?: string
 }
 
@@ -39,7 +39,6 @@ type WebCryptoParams = {
  * — Libsodium.js library integration
  */
 export class SNWebCrypto implements SNPureCrypto {
-
   private ready: Promise<void> | null
 
   constructor() {
@@ -265,7 +264,7 @@ export class SNWebCrypto implements SNPureCrypto {
       name: WebCryptoAlgs.Pbkdf2,
       salt: await Utils.stringToArrayBuffer(salt),
       iterations: iterations,
-      hash: { name: WebCryptoAlgs.Sha512 },
+      hash: { name: WebCryptoAlgs.Sha512 }
     }
 
     return subtleCrypto.deriveBits(params, key, length).then((bits) => {
@@ -335,5 +334,72 @@ export class SNWebCrypto implements SNPureCrypto {
     } catch {
       return null
     }
+  }
+
+  /**
+   * Generates a random secret for TOTP authentication
+   *
+   * RFC4226 reccomends a length of at least 160 bits = 32 b32 chars
+   * https://datatracker.ietf.org/doc/html/rfc4226#section-4
+   */
+  public async generateOtpSecret(): Promise<string> {
+    const bits = 160
+    const bytes = bits / 8
+    const secretBytes = Utils.getGlobalScope().crypto.getRandomValues(
+      new Uint8Array(bytes)
+    )
+    const secret = Utils.base32Encode(secretBytes)
+    return secret
+  }
+
+  /**
+   * Generates a HOTP code as per RFC4226 specification
+   * using HMAC-SHA1
+   * https://datatracker.ietf.org/doc/html/rfc4226
+   *
+   * @param secret OTP shared secret
+   * @param counter HOTP counter
+   * @returns HOTP auth code
+   */
+  public async hotpToken(
+    secret: string,
+    counter: number,
+    tokenLength: number = 6
+  ): Promise<string> {
+    const encoder = new TextEncoder()
+    const bytes = encoder.encode(secret)
+
+    const key = await this.webCryptoImportKey(bytes, WebCryptoAlgs.Hmac, 
+      [WebCryptoActions.Sign], {name:WebCryptoAlgs.Sha1});
+
+    const counterArray = Utils.padStart(counter)
+    const hs = await Utils.getSubtleCrypto().sign('HMAC', key, counterArray)
+    const sNum = Utils.truncateOTP(hs)
+    const padded = ('0'.repeat(tokenLength) + (sNum % 10 ** tokenLength)).slice(
+      -tokenLength
+    )
+
+    return padded
+  }
+
+  /**
+   * Generates a TOTP code as per RFC6238 specification
+   * using HMAC-SHA1
+   * https://datatracker.ietf.org/doc/html/rfc6238
+   *
+   * @param secret OTP shared secret
+   * @param timestamp time specified in milliseconds since UNIX epoch
+   * @param step time step specified in seconds
+   * @returns TOTP auth code
+   */
+  public async totpToken(
+    secret: string,
+    timestamp: number,
+    tokenLength: number = 6,
+    step: number = 30
+  ): Promise<string> {
+    const time = Math.floor(timestamp / step / 1000.0)
+    const token = await this.hotpToken(secret, time, tokenLength)
+    return token
   }
 }

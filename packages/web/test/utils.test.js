@@ -70,4 +70,35 @@ describe('utils', async function () {
     const result = await base64ToHex(b64);
     expect(result).to.equal('68656c6c6f20776f726c64');
   });
-});
+
+  /**
+   * Table of test values for base32 from RFC4648
+   * https://datatracker.ietf.org/doc/html/rfc4648#section-10
+   */
+  const base32TestPair = [
+    { text: '', base32: '' },
+    { text: 'f', base32: 'MY======' },
+    { text: 'fo', base32: 'MZXQ====' },
+    { text: 'foo', base32: 'MZXW6===' },
+    { text: 'foob', base32: 'MZXW6YQ=' },
+    { text: 'fooba', base32: 'MZXW6YTB' },
+    { text: 'foobar', base32: 'MZXW6YTBOI======' }
+  ]
+
+  it('base32Encode', async function () {
+    const encoder = new TextEncoder()
+    for (let pair of base32TestPair) {
+      const result = base32Encode(encoder.encode(pair.text).buffer)
+      expect(result).to.equal(pair.base32)
+    }
+  })
+
+  it('base32Decode', async function () {
+    const decoder = new TextDecoder()
+    for (let pair of base32TestPair) {
+      const bufferResult = base32Decode(pair.base32)
+      const result = decoder.decode(bufferResult)
+      expect(result).to.equal(pair.text)
+    }
+  })
+})

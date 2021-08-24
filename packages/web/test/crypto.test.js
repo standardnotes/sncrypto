@@ -265,4 +265,57 @@ describe('crypto operations', async function () {
     const expectedResult = "720f95400220748a811bca9b8cff5d6e";
     expect(result).to.equal(expectedResult);
   });
-});
+
+  it('generates random OTP secret 160 bits long', async function () {
+    const secret = await webCrypto.generateOtpSecret()
+    expect(secret).to.have.length(32)
+    expect(secret).to.not.include('=')
+  })
+
+  it('generates valid HOTP tokens', async function () {
+    /**
+     * Test data acquired from RFC4226
+     * https://datatracker.ietf.org/doc/html/rfc4226#page-32
+     */
+    const secret = '12345678901234567890'
+    const hotpTest = [
+      '755224',
+      '287082',
+      '359152',
+      '969429',
+      '338314',
+      '254676',
+      '287922',
+      '162583',
+      '399871',
+      '520489'
+    ]
+
+    for (let counter = 0; counter < hotpTest.length; counter++) {
+      const hotp = hotpTest[counter]
+      const result = await webCrypto.hotpToken(secret, counter)
+      expect(result).to.equal(hotp)
+    }
+  })
+
+  it('generates valid TOTP tokens', async function () {
+    /**
+     * Test data acquired from RFC6238
+     * https://datatracker.ietf.org/doc/html/rfc6238#appendix-B
+     */
+    const secret = '12345678901234567890'
+    const tokenLength = 8
+    const totpTest = [
+      { time: 59000, totp: '94287082' },
+      { time: 1111111109000, totp: '07081804' },
+      { time: 1111111111000, totp: '14050471' },
+      { time: 1234567890000, totp: '89005924' },
+      { time: 2000000000000, totp: '69279037' }
+    ]
+
+    for (let { time, totp } of totpTest) {
+      const result = await webCrypto.totpToken(secret, time, tokenLength)
+      expect(result).to.equal(totp)
+    }
+  })
+})
