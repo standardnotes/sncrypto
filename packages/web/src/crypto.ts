@@ -78,9 +78,11 @@ export class SNWebCrypto implements SNPureCrypto {
     length: number
   ): Promise<HexString | null> {
     const keyData = await Utils.stringToArrayBuffer(password)
-    const key = await this.webCryptoImportKey(keyData, WebCryptoAlgs.Pbkdf2, [
-      WebCryptoActions.DeriveBits
-    ])
+    const key = await this.webCryptoImportKey(
+      keyData,
+      WebCryptoAlgs.Pbkdf2,
+      [WebCryptoActions.DeriveBits]
+    )
     if (!key) {
       console.error('Key is null, unable to continue')
       return null
@@ -90,9 +92,7 @@ export class SNWebCrypto implements SNPureCrypto {
 
   public async generateRandomKey(bits: number): Promise<string> {
     const bytes = bits / 8
-    const arrayBuffer = Utils.getGlobalScope().crypto.getRandomValues(
-      new Uint8Array(bytes)
-    )
+    const arrayBuffer = Utils.getGlobalScope().crypto.getRandomValues(new Uint8Array(bytes))
     return Utils.arrayBufferToHexString(arrayBuffer)
   }
 
@@ -104,11 +104,17 @@ export class SNWebCrypto implements SNPureCrypto {
     const keyData = await Utils.hexStringToArrayBuffer(key)
     const ivData = await Utils.hexStringToArrayBuffer(iv)
     const alg = { name: WebCryptoAlgs.AesCbc, iv: ivData }
-    const importedKeyData = await this.webCryptoImportKey(keyData, alg.name, [
-      WebCryptoActions.Encrypt
-    ])
+    const importedKeyData = await this.webCryptoImportKey(
+      keyData,
+      alg.name,
+      [WebCryptoActions.Encrypt]
+    )
     const textData = await Utils.stringToArrayBuffer(plaintext)
-    const result = await crypto.subtle.encrypt(alg, importedKeyData, textData)
+    const result = await crypto.subtle.encrypt(
+      alg,
+      importedKeyData,
+      textData
+    )
     return Utils.arrayBufferToBase64(result)
   }
 
@@ -120,13 +126,19 @@ export class SNWebCrypto implements SNPureCrypto {
     const keyData = await Utils.hexStringToArrayBuffer(key)
     const ivData = await Utils.hexStringToArrayBuffer(iv)
     const alg = { name: WebCryptoAlgs.AesCbc, iv: ivData }
-    const importedKeyData = await this.webCryptoImportKey(keyData, alg.name, [
-      WebCryptoActions.Decrypt
-    ])
+    const importedKeyData = await this.webCryptoImportKey(
+      keyData,
+      alg.name,
+      [WebCryptoActions.Decrypt]
+    )
     const textData = await Utils.base64ToArrayBuffer(ciphertext)
 
     try {
-      const result = await crypto.subtle.decrypt(alg, importedKeyData, textData)
+      const result = await crypto.subtle.decrypt(
+        alg,
+        importedKeyData,
+        textData
+      )
 
       return Utils.arrayBufferToString(result)
     } catch {
@@ -357,13 +369,9 @@ export class SNWebCrypto implements SNPureCrypto {
     const encoder = new TextEncoder()
     const bytes = encoder.encode(secret)
 
-    const key = await Utils.getSubtleCrypto().importKey(
-      'raw',
-      bytes,
-      { name: 'HMAC', hash: { name: 'SHA-1' } },
-      false,
-      ['sign']
-    )
+    const key = await this.webCryptoImportKey(bytes, WebCryptoAlgs.Hmac, 
+      [WebCryptoActions.Sign], {name:WebCryptoAlgs.Sha1});
+
     const counterArray = Utils.padStart(counter)
     const hs = await Utils.getSubtleCrypto().sign('HMAC', key, counterArray)
     const sNum = Utils.truncateOTP(hs)

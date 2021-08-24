@@ -38,10 +38,7 @@ export function getGlobalScope(): Window & typeof globalThis {
  * @access public
  */
 export function ieOrEdge(): boolean {
-  return (
-    (typeof document !== 'undefined' && !!document.documentMode) ||
-    /Edge/.test(navigator.userAgent)
-  )
+  return (typeof document !== 'undefined' && !!document.documentMode) || /Edge/.test(navigator.userAgent)
 }
 
 /**
@@ -49,9 +46,7 @@ export function ieOrEdge(): boolean {
  * @access public
  */
 export function isWebCryptoAvailable(): boolean {
-  return (
-    !ieOrEdge() && getGlobalScope().crypto && !!getGlobalScope().crypto.subtle
-  )
+  return !ieOrEdge() && getGlobalScope().crypto && !!getGlobalScope().crypto.subtle
 }
 
 /**
@@ -77,31 +72,22 @@ export function generateUUIDSync(): string {
     const buf = new Uint32Array(4)
     crypto.getRandomValues(buf)
     let idx = -1
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
-      /[xy]/g,
-      function (c) {
-        idx++
-        const r = (buf[idx >> 3] >> ((idx % 8) * 4)) & 15
-        const v = c === 'x' ? r : (r & 0x3) | 0x8
-        return v.toString(16)
-      }
-    )
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      idx++
+      const r = (buf[idx >> 3] >> ((idx % 8) * 4)) & 15
+      const v = c === 'x' ? r : (r & 0x3 | 0x8)
+      return v.toString(16)
+    })
   } else {
     let d = new Date().getTime()
-    if (
-      globalScope.performance &&
-      typeof globalScope.performance.now === 'function'
-    ) {
+    if (globalScope.performance && typeof globalScope.performance.now === "function") {
       d += performance.now() // use high-precision timer if available
     }
-    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
-      /[xy]/g,
-      function (c) {
-        const r = (d + Math.random() * 16) % 16 | 0
-        d = Math.floor(d / 16)
-        return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16)
-      }
-    )
+    const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      const r = (d + Math.random() * 16) % 16 | 0
+      d = Math.floor(d / 16)
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16)
+    })
     return uuid
   }
 }
@@ -119,9 +105,7 @@ export async function stringToArrayBuffer(string: string): Promise<Uint8Array> {
  * Converts an ArrayBuffer into a plain string
  * @param {ArrayBuffer} arrayBuffer
  */
-export async function arrayBufferToString(
-  arrayBuffer: ArrayBuffer
-): Promise<string> {
+export async function arrayBufferToString(arrayBuffer: ArrayBuffer): Promise<string> {
   await ready
   return to_string(arrayBuffer as Uint8Array)
 }
@@ -130,9 +114,7 @@ export async function arrayBufferToString(
  * Converts an ArrayBuffer into a hex string
  * @param arrayBuffer
  */
-export async function arrayBufferToHexString(
-  arrayBuffer: ArrayBuffer
-): Promise<string> {
+export async function arrayBufferToHexString(arrayBuffer: ArrayBuffer): Promise<string> {
   await ready
   return to_hex(Buffer.from(arrayBuffer))
 }
@@ -160,9 +142,7 @@ export async function base64ToArrayBuffer(base64: string): Promise<Uint8Array> {
  * Converts an ArrayBuffer into a base64 string
  * @param buffer
  */
-export async function arrayBufferToBase64(
-  arrayBuffer: ArrayBuffer
-): Promise<string> {
+export async function arrayBufferToBase64(arrayBuffer: ArrayBuffer): Promise<string> {
   await ready
   return to_base64(Buffer.from(arrayBuffer), SN_BASE64_VARIANT)
 }

@@ -6,6 +6,7 @@ export type Base64String = string
  * Interface that clients have to implement to use snjs
  */
 export interface SNPureCrypto {
+
   /**
    * Derives a key from a password and salt using PBKDF2 via WebCrypto.
    * @param password - utf8 string
@@ -62,7 +63,10 @@ export interface SNPureCrypto {
    * @param key - In hex format
    * @returns Hex string or null if computation fails
    */
-  hmac256(message: Utf8String, key: HexString): Promise<HexString | null>
+  hmac256(
+    message: Utf8String,
+    key: HexString
+  ): Promise<HexString | null>
 
   /**
    * @param text - Plain utf8 string
@@ -76,7 +80,10 @@ export interface SNPureCrypto {
    * @param key - In hex format
    * @returns Hex string or null if computation fails
    */
-  hmac1(message: Utf8String, key: HexString): Promise<HexString | null>
+  hmac1(
+    message: Utf8String,
+    key: HexString
+  ): Promise<HexString | null>;
 
   /**
    * Use only for legacy applications.
