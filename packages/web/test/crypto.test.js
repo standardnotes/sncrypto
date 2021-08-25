@@ -277,7 +277,9 @@ describe('crypto operations', async function () {
      * Test data acquired from RFC4226
      * https://datatracker.ietf.org/doc/html/rfc4226#page-32
      */
+    const encoder = new TextEncoder();
     const secret = '12345678901234567890'
+    const b32Secret = base32Encode(encoder.encode(secret))
     const hotpTest = [
       '755224',
       '287082',
@@ -293,7 +295,7 @@ describe('crypto operations', async function () {
 
     for (let counter = 0; counter < hotpTest.length; counter++) {
       const hotp = hotpTest[counter]
-      const result = await webCrypto.hotpToken(secret, counter)
+      const result = await webCrypto.hotpToken(b32Secret, counter)
       expect(result).to.equal(hotp)
     }
   })
@@ -303,7 +305,9 @@ describe('crypto operations', async function () {
      * Test data acquired from RFC6238
      * https://datatracker.ietf.org/doc/html/rfc6238#appendix-B
      */
+    const encoder = new TextEncoder();
     const secret = '12345678901234567890'
+    const b32Secret = base32Encode(encoder.encode(secret));
     const tokenLength = 8
     const totpTest = [
       { time: 59000, totp: '94287082' },
@@ -314,7 +318,7 @@ describe('crypto operations', async function () {
     ]
 
     for (let { time, totp } of totpTest) {
-      const result = await webCrypto.totpToken(secret, time, tokenLength)
+      const result = await webCrypto.totpToken(b32Secret, time, tokenLength)
       expect(result).to.equal(totp)
     }
   })

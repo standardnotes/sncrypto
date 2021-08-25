@@ -1,6 +1,6 @@
 {
   "name": "@standardnotes/sncrypto-common",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "SNCrypto common",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
