@@ -17,7 +17,7 @@
     "test": "jest spec"
   },
   "dependencies": {
-    "@standardnotes/sncrypto-common": "^1.5.1"
+    "@standardnotes/sncrypto-common": "^1.5.2"
   },
   "jest": {
     "preset": "./jest.json",

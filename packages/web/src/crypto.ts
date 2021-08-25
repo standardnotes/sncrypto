@@ -366,7 +366,7 @@ export class SNWebCrypto implements SNPureCrypto {
     counter: number,
     tokenLength = 6
   ): Promise<string> {
-    const bytes = new Uint8Array(Utils.base32Decode(secret));
+    const bytes = new Uint8Array(Utils.base32Decode(secret))
 
     const key = await this.webCryptoImportKey(bytes, WebCryptoAlgs.Hmac, 
       [WebCryptoActions.Sign], {name:WebCryptoAlgs.Sha1})
