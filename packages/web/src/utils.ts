@@ -10,6 +10,8 @@ import {
   to_string
 } from './libsodium'
 
+import { Buffer } from 'buffer'
+
 const SN_BASE64_VARIANT = base64_variants.ORIGINAL
 
 /**

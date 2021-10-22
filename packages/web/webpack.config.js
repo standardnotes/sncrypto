@@ -4,7 +4,11 @@ const path = require('path');
      "sncrypto-web.js": "./src/index",
    },
    resolve: {
-     extensions: ['.ts', '.js']
+     extensions: ['.ts', '.js'],
+     fallback: {
+      crypto: false,
+      path: false,
+    },
    },
    output: {
      path: path.resolve(__dirname, 'dist'),
